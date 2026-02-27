@@ -10,11 +10,17 @@ public class Enemy {
         y = startY;
     }
 
-    public void update(int playerX, int playerY) {
-        if (x < playerX) {x += speed;};
-        if (x > playerX) {x -= speed;};
-        if (y < playerY) {y += speed;};
-        if (y > playerY) {y -= speed;};
+    public void update(Player player) {
+        if (x < player.x) {x += speed;};
+        if (x > player.x) {x -= speed;};
+        if (y < player.y) {y += speed;};
+        if (y > player.y) {y -= speed;};
+
+        // checks collision with player, and causes damage to player
+        if (player.x < x + 40 && player.x + 40 > x &&
+            player.y < y + 40 && player.y + 40 > y) {
+                player.takeDamage(1);
+            }
     }
 
     public void draw(Graphics g) {

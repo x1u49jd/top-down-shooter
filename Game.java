@@ -44,7 +44,7 @@ public class Game implements KeyListener{
             // update player position based on keys pressed
             player.move(upPressed, downPressed, leftPressed, rightPressed);
             // update enemy position based on player's position with means to get closer to it
-            enemy.update(player.x, player.y);
+            enemy.update(player);
 
             panel.repaint(); // redraw after moving
 
