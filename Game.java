@@ -1,26 +1,21 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
-
-
 public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
-
-    int playerX = 400;
-    int playerY = 400;
-    int playerSpeed = 5;
 
     boolean upPressed = false;
     boolean downPressed = false;
     boolean leftPressed = false;
     boolean rightPressed = false;
+
+    Player player;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -46,10 +41,7 @@ public class Game implements KeyListener{
     public void gameLoop() {
         while (true) {
             // update player position based on keys pressed
-            if (upPressed) {playerY -= playerSpeed;};
-            if (downPressed) {playerY += playerSpeed;};
-            if (leftPressed) {playerX -= playerSpeed;};
-            if (rightPressed) {playerX += playerSpeed;};
+            player.move(upPressed, downPressed, leftPressed, rightPressed);
 
             panel.repaint(); // redraw after moving
 
@@ -69,25 +61,27 @@ public class Game implements KeyListener{
     
         window.setSize(800,600);
         window.setTitle("Top Down Shooter");
+
         // tells Java that when X is clicked, end the program
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+
         // centers the window on screen
         window.setLocationRelativeTo(null);
-        window.setVisible(true);
+
+        player = new Player(400,400);
 
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
-                g.setColor(Color.BLUE);
-                g.fillRect(playerX, playerY, 40, 40);
+                player.draw(g);
             }
 
         };
 
         window.add(panel);
-
         window.addKeyListener(this);
+        window.setVisible(true);
 
         new Thread(this::gameLoop).start();
     }
