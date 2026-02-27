@@ -1,12 +1,15 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
-import java.awt.Color;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 
-public class Game {
+
+public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
 
@@ -14,6 +17,24 @@ public class Game {
     int playerY = 400;
     int playerSpeed = 5;
 
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_W) {playerY -= playerSpeed;};
+        if (key == KeyEvent.VK_S) {playerY += playerSpeed;};
+        if (key == KeyEvent.VK_A) {playerX -= playerSpeed;};
+        if (key == KeyEvent.VK_D) {playerX += playerSpeed;};
+
+        panel.repaint(); // redraw after moving
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    
     public Game() {
         window = new JFrame();
     
@@ -36,6 +57,8 @@ public class Game {
         };
 
         window.add(panel);
+
+        window.addKeyListener(this);
     }
 
     public static void main(String[] args) {
