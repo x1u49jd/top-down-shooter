@@ -4,7 +4,8 @@ import java.awt.Color;
 public class Player {
     int x,y;
     int speed = 8;
-    int health = 10;
+    int health = 50;
+    int maxHealth = 50;
 
     public Player(int startX, int startY) {
         x = startX;
@@ -22,9 +23,21 @@ public class Player {
         g.setColor(Color.BLUE);
         g.fillRect(x, y, 40, 40);
 
-        // draws healthbar above player
+        // ---- UI HEALTH BAR ----
+        int barWidth = 40; // same width as player
+        int barHeight = 8;
+
+        // grey background
+        g.setColor(Color.GRAY);
+        g.fillRect(x, y - 12, barWidth, barHeight);
+
+        // health scaled properly
         g.setColor(Color.GREEN);
-        g.fillRect(x, y - 12, health * 4, 8);
+        int currentWidth = (int)((health / (double)maxHealth) * barWidth);
+        g.fillRect(x, y - 12, currentWidth, barHeight);
+
+
+
     }
 
     // called when enemy hits player, player takes damage
