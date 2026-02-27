@@ -16,6 +16,7 @@ public class Game implements KeyListener{
     boolean rightPressed = false;
 
     Player player;
+    Enemy enemy;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -69,12 +70,14 @@ public class Game implements KeyListener{
         window.setLocationRelativeTo(null);
 
         player = new Player(400,400);
+        enemy = new Enemy(400, 100);
 
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
                 player.draw(g);
+                enemy.draw(g);
             }
 
         };
