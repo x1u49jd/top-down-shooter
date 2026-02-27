@@ -17,24 +17,53 @@ public class Game implements KeyListener{
     int playerY = 400;
     int playerSpeed = 5;
 
+    boolean upPressed = false;
+    boolean downPressed = false;
+    boolean leftPressed = false;
+    boolean rightPressed = false;
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-
-        if (key == KeyEvent.VK_W) {playerY -= playerSpeed;};
-        if (key == KeyEvent.VK_S) {playerY += playerSpeed;};
-        if (key == KeyEvent.VK_A) {playerX -= playerSpeed;};
-        if (key == KeyEvent.VK_D) {playerX += playerSpeed;};
-
-        panel.repaint(); // redraw after moving
+        if (key == KeyEvent.VK_W) {upPressed = true;};
+        if (key == KeyEvent.VK_S) {downPressed = true;};
+        if (key == KeyEvent.VK_A) {leftPressed = true;};
+        if (key == KeyEvent.VK_D) {rightPressed = true;};
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
-
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_W) {upPressed = false;};
+        if (key == KeyEvent.VK_S) {downPressed = false;};
+        if (key == KeyEvent.VK_A) {leftPressed = false;};
+        if (key == KeyEvent.VK_D) {rightPressed = false;};
+    }
+    
     @Override
     public void keyTyped(KeyEvent e) {}
     
+    public void gameLoop() {
+        while (true) {
+            // update player position based on keys pressed
+            if (upPressed) {playerY -= playerSpeed;};
+            if (downPressed) {playerY += playerSpeed;};
+            if (leftPressed) {playerX -= playerSpeed;};
+            if (rightPressed) {playerX += playerSpeed;};
+
+            panel.repaint(); // redraw after moving
+
+            // wait 16ms (60fps)
+            try {
+                Thread.sleep(16);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
     public Game() {
         window = new JFrame();
     
@@ -59,6 +88,8 @@ public class Game implements KeyListener{
         window.add(panel);
 
         window.addKeyListener(this);
+
+        new Thread(this::gameLoop).start();
     }
 
     public static void main(String[] args) {
