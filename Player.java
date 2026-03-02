@@ -4,8 +4,8 @@ import java.awt.Color;
 public class Player {
     int x,y;
     int speed = 8;
-    int health = 50;
-    int maxHealth = 50;
+    int health = 5, maxHealth = 5;
+    int knockbackX, knockbackY;
 
     public Player(int startX, int startY) {
         x = startX;
@@ -17,6 +17,14 @@ public class Player {
         if (down) {y += speed;};
         if (left) {x -= speed;};
         if (right) {x += speed;};
+
+        // moves player according to knockback
+        x += knockbackX;
+        y += knockbackY;
+
+        // slowly reduces knockback for smooth stop
+        knockbackX *= 0.9; // friction factor
+        knockbackY *= 0.9;
     };
 
     public void draw(Graphics g) {
@@ -29,12 +37,12 @@ public class Player {
 
         // grey background
         g.setColor(Color.GRAY);
-        g.fillRect(x, y - 12, barWidth, barHeight);
+        g.fillRect(x, y - 15, barWidth, barHeight);
 
         // health scaled properly
         g.setColor(Color.GREEN);
         int currentWidth = (int)((health / (double)maxHealth) * barWidth);
-        g.fillRect(x, y - 12, currentWidth, barHeight);
+        g.fillRect(x, y - 15, currentWidth, barHeight);
 
 
 
@@ -49,13 +57,31 @@ public class Player {
         }
     }
 
+    public void applyKnockback(int enemyX, int enemyY, double knockbackStrength) {
+        // --- Step 1: Compute vector from enemy to player ---
+        // This gives a direction pointing *away* from the enemy
+        double dx = x - enemyX; // horizontal difference
+        double dy = y - enemyY; // vertical difference
 
-    public void applyKnockBack(int enemyX, int enemyY, int knockbackStrength) {
-        // if player is on one side, push them further in that direction
-        if (x < enemyX) {x-= knockbackStrength;}
-        else {x += knockbackStrength;};
+        // --- Step 2: Calculate distance between enemy and player ---
+        // Using the Pythagorean theorem: distance = √(dx² + dy²)
+        double length = Math.sqrt(dx * dx + dy * dy);
 
-        if (y < enemyY) {y-= knockbackStrength;}
-        else {y += knockbackStrength;};
-    }
+        // --- Step 3: Avoid division by 0 ---
+        // If player and enemy are exactly on top of each other, length would be 0
+        // Dividing by 0 would crash the program
+        if (length == 0) {length = 1;};
+
+        // --- Step 4: Normalise the vector ---
+        // We only want the direction, not the distance
+        // Divide each component by the length to make the vector have length 1
+        dx /= length;
+        dy /= length;
+
+        // --- Step 5: Apply knockback velocity ---
+        // Multiply unit vector by knockback strength to get the push amount
+        // Store it in knockbackX and knockbackY for smooth sliding in move() later on
+        knockbackX = (int) (dx * knockbackStrength);
+        knockbackY = (int) (dy * knockbackStrength);
+}
 }
