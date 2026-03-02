@@ -4,6 +4,7 @@ import java.awt.Graphics;
 public class Enemy {
     int x,y;
     int speed = 2;
+    int strength = 80; // strength of the knockback from the enemy
 
     public Enemy(int startX, int startY) {
         x = startX;
@@ -20,6 +21,7 @@ public class Enemy {
         if (player.x < x + 40 && player.x + 40 > x &&
             player.y < y + 40 && player.y + 40 > y) {
                 player.takeDamage(1);
+                player.applyKnockBack(x, y, strength);
             }
     }
 

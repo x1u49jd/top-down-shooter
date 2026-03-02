@@ -48,4 +48,14 @@ public class Player {
             System.out.println("Player is dead!");
         }
     }
+
+
+    public void applyKnockBack(int enemyX, int enemyY, int strength) {
+        // if player is on one side, push them further in that direction
+        if (x < enemyX) {x-= strength;}
+        else {x += strength;};
+
+        if (y < enemyY) {y-= strength;}
+        else {y += strength;};
+    }
 }
