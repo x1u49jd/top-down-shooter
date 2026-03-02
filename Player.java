@@ -50,12 +50,12 @@ public class Player {
     }
 
 
-    public void applyKnockBack(int enemyX, int enemyY, int strength) {
+    public void applyKnockBack(int enemyX, int enemyY, int knockbackStrength) {
         // if player is on one side, push them further in that direction
-        if (x < enemyX) {x-= strength;}
-        else {x += strength;};
+        if (x < enemyX) {x-= knockbackStrength;}
+        else {x += knockbackStrength;};
 
-        if (y < enemyY) {y-= strength;}
-        else {y += strength;};
+        if (y < enemyY) {y-= knockbackStrength;}
+        else {y += knockbackStrength;};
     }
 }
