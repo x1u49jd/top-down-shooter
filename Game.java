@@ -13,6 +13,8 @@ public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
 
+    int windowWidth = 800, windowHeight = 600;
+
     boolean upPressed = false;
     boolean downPressed = false;
     boolean leftPressed = false;
@@ -50,7 +52,7 @@ public class Game implements KeyListener{
             enemy.update(player);
 
             // update player bullets
-            player.updateBullets();
+            player.updateBullets(panel.getWidth(), panel.getHeight());
 
             panel.repaint(); // redraw after moving
 
@@ -68,7 +70,7 @@ public class Game implements KeyListener{
     public Game() {
         window = new JFrame();
     
-        window.setSize(800,600);
+        window.setSize(windowWidth, windowHeight);
         window.setTitle("Top Down Shooter");
 
         // tells Java that when X is clicked, end the program

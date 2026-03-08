@@ -102,13 +102,13 @@ public class Player {
         bullets.add(new Bullet(startX, startY, targetX, targetY));
     }
 
-    public void updateBullets () {
+    public void updateBullets (int windowWidth, int windowHeight) {
         for (int i = 0; i < bullets.size(); ++i){
             Bullet b = bullets.get(i);
             b.update();
 
             // if bullet goes off screen, remove it
-            if(b.x < 0 || b.x > 800 || b.y < 0 || b.y > 600) {
+            if(b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
                 bullets.remove(i);
                 i--;
             }
