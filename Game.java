@@ -23,6 +23,9 @@ public class Game implements KeyListener{
     Player player;
     Enemy enemy;
 
+    long respawnTimer = 0;
+    int respawnDelay = 2000;
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
@@ -50,6 +53,23 @@ public class Game implements KeyListener{
             player.move(upPressed, downPressed, leftPressed, rightPressed);
             // update enemy position based on player's position with means to get closer to it
             enemy.update(player);
+
+            if (enemy.health <= 0) {
+                // start respawn timer if not started
+                if (respawnTimer == 0) {
+                    respawnTimer = System.currentTimeMillis();
+                }
+                // check if delay passed
+                if (System.currentTimeMillis() - respawnTimer > respawnDelay) {
+                    int spawnX = (int)(Math.random() * panel.getWidth());
+                    int spawnY = (int)(Math.random() * panel.getHeight());
+
+                    enemy = new Enemy(spawnX, spawnY);
+
+                    respawnTimer = 0;
+
+                }
+            }
 
             // update player bullets
             player.updateBullets(panel.getWidth(), panel.getHeight(), enemy);
