@@ -6,6 +6,9 @@ import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
@@ -46,6 +49,9 @@ public class Game implements KeyListener{
             // update enemy position based on player's position with means to get closer to it
             enemy.update(player);
 
+            // update player bullets
+            player.updateBullets();
+
             panel.repaint(); // redraw after moving
 
             // wait 16ms (60fps)
@@ -83,6 +89,13 @@ public class Game implements KeyListener{
             }
 
         };
+
+        panel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e) {
+                player.shoot(e.getX(), e.getY());
+            }
+        });
 
         window.add(panel);
         window.addKeyListener(this);

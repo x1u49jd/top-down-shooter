@@ -1,11 +1,17 @@
 import java.awt.Graphics;
 import java.awt.Color;
+import java.util.ArrayList;
+
 
 public class Player {
     int x,y;
     int speed = 8;
     int health = 5, maxHealth = 5;
     int knockbackX, knockbackY;
+    int width = 40;
+    int height = 40;
+
+    ArrayList<Bullet> bullets = new ArrayList<>();
 
     public Player(int startX, int startY) {
         x = startX;
@@ -29,7 +35,7 @@ public class Player {
 
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
-        g.fillRect(x, y, 40, 40);
+        g.fillRect(x, y, width, height);
 
         // ---- UI HEALTH BAR ----
         int barWidth = 40; // same width as player
@@ -44,7 +50,10 @@ public class Player {
         int currentWidth = (int)((health / (double)maxHealth) * barWidth);
         g.fillRect(x, y - 15, currentWidth, barHeight);
 
-
+        // draw bullets
+        for (Bullet b : bullets) {
+            b.draw(g);
+        }
 
     }
 
@@ -83,5 +92,26 @@ public class Player {
         // Store it in knockbackX and knockbackY for smooth sliding in move() later on
         knockbackX = (int) (dx * knockbackStrength);
         knockbackY = (int) (dy * knockbackStrength);
-}
+    }
+
+    public void shoot(double targetX, double targetY) {
+        // spawn bullet at player's center
+        double startX = x + (width / 2);
+        double startY = y + (height / 2);
+
+        bullets.add(new Bullet(startX, startY, targetX, targetY));
+    }
+
+    public void updateBullets () {
+        for (int i = 0; i < bullets.size(); ++i){
+            Bullet b = bullets.get(i);
+            b.update();
+
+            // if bullet goes off screen, remove it
+            if(b.x < 0 || b.x > 800 || b.y < 0 || b.y > 600) {
+                bullets.remove(i);
+                i--;
+            }
+        }
+    }
 }
