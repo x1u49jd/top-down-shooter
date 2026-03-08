@@ -7,6 +7,7 @@ public class Enemy {
     int health = 3, maxHealth = 3;
     double knockbackStrength = 20;
     int width = 40, height = 40;
+    boolean alive = true;
 
     public Enemy(int startX, int startY) {
         x = startX;
@@ -14,6 +15,9 @@ public class Enemy {
     }
 
     public void update(Player player) {
+
+        if (alive == false) { return;}
+
         if (x < player.x) {x += speed;};
         if (x > player.x) {x -= speed;};
         if (y < player.y) {y += speed;};
@@ -28,6 +32,9 @@ public class Enemy {
     }
 
     public void draw(Graphics g) {
+
+        if (alive == false) { return;}
+
         g.setColor(Color.RED);
         g.fillRect(x, y, 40, 40);
     }
@@ -36,6 +43,7 @@ public class Enemy {
         health -= amount;
         if (health <= 0) {
             health = 0;
+            alive = false;
         }
     }
 }
