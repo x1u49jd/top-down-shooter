@@ -117,6 +117,7 @@ public class Player {
                      b.y > enemy.y && b.y < enemy.y + enemy.height) {
                 bullets.remove(i);
                 i--;
+                enemy.takeDamage(1);
             }
         }
     }

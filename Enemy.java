@@ -33,7 +33,7 @@ public class Enemy {
     }
 
     public void takeDamage(int amount) {
-        health -= 1;
+        health -= amount;
         if (health <= 0) {
             health = 0;
         }
