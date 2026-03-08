@@ -102,13 +102,19 @@ public class Player {
         bullets.add(new Bullet(startX, startY, targetX, targetY));
     }
 
-    public void updateBullets (int windowWidth, int windowHeight) {
+    public void updateBullets (int windowWidth, int windowHeight, Enemy enemy) {
         for (int i = 0; i < bullets.size(); ++i){
             Bullet b = bullets.get(i);
             b.update();
 
             // if bullet goes off screen, remove it
-            if(b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
+            if (b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
+                bullets.remove(i);
+                i--;
+            }
+            // if bullet touches enemy, remove it
+            else if (b.x > enemy.x && b.x < enemy.x + enemy.width &&
+                     b.y > enemy.y && b.y < enemy.y + enemy.height) {
                 bullets.remove(i);
                 i--;
             }

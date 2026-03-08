@@ -6,6 +6,7 @@ public class Enemy {
     int speed = 2;
     int health = 3, maxHealth = 3;
     double knockbackStrength = 20;
+    int width = 40, height = 40;
 
     public Enemy(int startX, int startY) {
         x = startX;

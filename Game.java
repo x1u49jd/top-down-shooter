@@ -52,7 +52,7 @@ public class Game implements KeyListener{
             enemy.update(player);
 
             // update player bullets
-            player.updateBullets(panel.getWidth(), panel.getHeight());
+            player.updateBullets(panel.getWidth(), panel.getHeight(), enemy);
 
             panel.repaint(); // redraw after moving
 
