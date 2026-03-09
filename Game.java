@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.ArrayList;
+
 public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
@@ -21,10 +23,7 @@ public class Game implements KeyListener{
     boolean rightPressed = false;
 
     Player player;
-    Enemy enemy;
-
-    long respawnTimer = 0;
-    int respawnDelay = 2000;
+    ArrayList<Enemy> enemies;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -51,28 +50,23 @@ public class Game implements KeyListener{
         while (true) {
             // update player position based on keys pressed
             player.move(upPressed, downPressed, leftPressed, rightPressed);
-            // update enemy position based on player's position with means to get closer to it
-            enemy.update(player);
-
-            if (enemy.health <= 0) {
-                // start respawn timer if not started
-                if (respawnTimer == 0) {
-                    respawnTimer = System.currentTimeMillis();
-                }
-                // check if delay passed
-                if (System.currentTimeMillis() - respawnTimer > respawnDelay) {
+            
+            for (Enemy e : enemies) {
+                e.update(player);
+                
+                if (!e.alive && System.currentTimeMillis() >= e.respawnTime) {
                     int spawnX = (int)(Math.random() * panel.getWidth());
                     int spawnY = (int)(Math.random() * panel.getHeight());
 
-                    enemy = new Enemy(spawnX, spawnY);
-
-                    respawnTimer = 0;
-
+                    e.x = spawnX;
+                    e.y = spawnY;
+                    e.health = e.maxHealth;
+                    e.alive = true;
                 }
             }
 
             // update player bullets
-            player.updateBullets(panel.getWidth(), panel.getHeight(), enemy);
+            player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
 
             panel.repaint(); // redraw after moving
 
@@ -100,14 +94,22 @@ public class Game implements KeyListener{
         window.setLocationRelativeTo(null);
 
         player = new Player(400,400);
-        enemy = new Enemy(400, 100);
+
+        enemies = new ArrayList<>();
+
+        enemies.add(new Enemy(100, 100));
+        enemies.add(new Enemy(700, 100));
+        enemies.add(new Enemy(100, 500));
+        enemies.add(new Enemy(700, 500));
 
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
                 player.draw(g);
-                enemy.draw(g);
+                for (Enemy e : enemies) {
+                    e.draw(g);
+                }
             }
 
         };

@@ -102,7 +102,7 @@ public class Player {
         bullets.add(new Bullet(startX, startY, targetX, targetY));
     }
 
-    public void updateBullets (int windowWidth, int windowHeight, Enemy enemy) {
+    public void updateBullets (int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
         for (int i = 0; i < bullets.size(); ++i){
             Bullet b = bullets.get(i);
             b.update();
@@ -113,11 +113,13 @@ public class Player {
                 i--;
             }
             // if bullet touches enemy, remove it
-            else if (b.x > enemy.x && b.x < enemy.x + enemy.width &&
-                     b.y > enemy.y && b.y < enemy.y + enemy.height) {
-                bullets.remove(i);
-                i--;
-                enemy.takeDamage(1);
+            for (Enemy e : enemies) {
+                if (b.x > e.x && b.x < e.x + e.width &&
+                        b.y > e.y && b.y < e.y + e.height) {
+                    bullets.remove(i);
+                    i--;
+                    e.takeDamage(1);
+                }
             }
         }
     }
