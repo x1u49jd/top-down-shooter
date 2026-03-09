@@ -111,14 +111,17 @@ public class Player {
             if (b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
                 bullets.remove(i);
                 i--;
+                continue; // bullet was removed, skip the enemy collision check
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
                 if (b.x > e.x && b.x < e.x + e.width &&
                         b.y > e.y && b.y < e.y + e.height) {
+                   
                     bullets.remove(i);
                     i--;
                     e.takeDamage(1);
+                    break; // bullet was removed, skip remaining enemy checks
                 }
             }
         }
