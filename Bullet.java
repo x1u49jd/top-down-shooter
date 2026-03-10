@@ -4,7 +4,7 @@ import java.awt.Color;
 public class Bullet {
     double x, y;
     double velX, velY;
-    double speed = 20;
+    double speed = 30;
     int width = 8;
     int height = 8;
     

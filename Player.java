@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Player {
     int x,y;
-    int speed = 8;
+    int speed = 6;
     int health = 5, maxHealth = 5;
     int knockbackX, knockbackY;
     int width = 40;
