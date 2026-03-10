@@ -42,12 +42,20 @@ public class Enemy {
         g.fillRect(x, y, 40, 40);
     }
 
-    public void takeDamage(int amount) {
+    public boolean takeDamage(int amount) {
+
+        // ignore damage to dead enemies
+        // and adding extra score when bullet hit an already dead enemy
+        if (!alive) { return false; };
+
         health -= amount;
         if (health <= 0) {
             health = 0;
             alive = false;
             respawnTime = System.currentTimeMillis() + respawnDelay;
+            return true; // enemy died
         }
+
+        return false; // enemy didn't die
     }
 }

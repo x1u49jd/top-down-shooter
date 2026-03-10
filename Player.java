@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 
 
@@ -12,6 +13,8 @@ public class Player {
     int height = 40;
 
     ArrayList<Bullet> bullets = new ArrayList<>();
+
+    int score = 0;
 
     public Player(int startX, int startY) {
         x = startX;
@@ -54,6 +57,10 @@ public class Player {
         for (Bullet b : bullets) {
             b.draw(g);
         }
+
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Score: " + score, 20, 40);
 
     }
 
@@ -111,13 +118,19 @@ public class Player {
             // if bullet goes off screen, remove it
             if (b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
                 bullets.remove(i);
+                continue;
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
                 if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
 
                     bullets.remove(i);
-                    e.takeDamage(1);
+
+                    // if the enemy died, add a score
+                    if (e.takeDamage(1)) {
+                        score++;
+                    }
+
                     break; // bullet was removed, skip remaining enemy checks
                 }
             }
