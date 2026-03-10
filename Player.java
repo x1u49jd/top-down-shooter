@@ -103,23 +103,20 @@ public class Player {
     }
 
     public void updateBullets (int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
-        for (int i = 0; i < bullets.size(); ++i){
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            
             Bullet b = bullets.get(i);
             b.update();
 
             // if bullet goes off screen, remove it
             if (b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
                 bullets.remove(i);
-                i--;
-                continue; // bullet was removed, skip the enemy collision check
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
-                if (b.x > e.x && b.x < e.x + e.width &&
-                        b.y > e.y && b.y < e.y + e.height) {
-                   
+                if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
+
                     bullets.remove(i);
-                    i--;
                     e.takeDamage(1);
                     break; // bullet was removed, skip remaining enemy checks
                 }
