@@ -16,6 +16,7 @@ public class Player {
 
     int maxAmmo = 8;
     int currentAmmo = 8;
+    int magazines = 3;
 
     int score = 0;
 
@@ -69,7 +70,7 @@ public class Player {
         // draw ammo
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo, 20, 80);
+        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo + " Mags: " + magazines, 20, 80);
 
     }
 
@@ -119,6 +120,16 @@ public class Player {
 
             bullets.add(new Bullet(startX, startY, targetX, targetY));
             currentAmmo--;
+        }
+        if (currentAmmo == 0){
+            reload();
+        }
+    }
+
+    public void reload() {
+        if (magazines > 0) {
+            currentAmmo = maxAmmo;
+            magazines--;
         }
     }
 
