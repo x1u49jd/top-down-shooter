@@ -14,6 +14,9 @@ public class Player {
 
     ArrayList<Bullet> bullets = new ArrayList<>();
 
+    int maxAmmo = 8;
+    int currentAmmo = 8;
+
     int score = 0;
 
     public Player(int startX, int startY) {
@@ -58,9 +61,15 @@ public class Player {
             b.draw(g);
         }
 
+        // draw score
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 24));
         g.drawString("Score: " + score, 20, 40);
+
+        // draw ammo
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo, 20, 80);
 
     }
 
@@ -102,11 +111,15 @@ public class Player {
     }
 
     public void shoot(double targetX, double targetY) {
-        // spawn bullet at player's center
-        double startX = x + (width / 2);
-        double startY = y + (height / 2);
 
-        bullets.add(new Bullet(startX, startY, targetX, targetY));
+        if (currentAmmo > 0) {
+            // spawn bullet at player's center
+            double startX = x + (width / 2);
+            double startY = y + (height / 2);
+
+            bullets.add(new Bullet(startX, startY, targetX, targetY));
+            currentAmmo--;
+        }
     }
 
     public void updateBullets (int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
