@@ -59,17 +59,20 @@ public class Game implements KeyListener{
             enemies.add(new Enemy(spawnX, spawnY));
         }
     }
-    
-    public void gameLoop() {
-        while (true) {
-            // update player position based on keys pressed
-            player.move(upPressed, downPressed, leftPressed, rightPressed);
-            
-            for (Enemy e : enemies) {
-                e.update(player);
-            }
 
-            boolean allEnemiesDead = true;
+    public void updatePlayer() {
+        // update player position based on keys pressed
+        player.move(upPressed, downPressed, leftPressed, rightPressed);
+    }
+
+    public void updateEnemies() {
+        for (Enemy e : enemies) {
+            e.update(player);
+        }
+    }
+    
+    public void checkWaveClear() {
+        boolean allEnemiesDead = true;
 
             for (Enemy e : enemies) {
                 if (e.alive) {
@@ -83,7 +86,14 @@ public class Game implements KeyListener{
                 enemiesPerWave += 2;
                 spawnWave();
             }
+    }
 
+    public void gameLoop() {
+        while (true) {
+            updatePlayer();
+            updateEnemies();
+            checkWaveClear();
+            
             // update player bullets
             player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
 
@@ -100,9 +110,8 @@ public class Game implements KeyListener{
 
     }
 
-    public Game() {
+    public void createWindow() {
         window = new JFrame();
-    
         window.setSize(windowWidth, windowHeight);
         window.setTitle("Top Down Shooter");
 
@@ -111,13 +120,14 @@ public class Game implements KeyListener{
 
         // centers the window on screen
         window.setLocationRelativeTo(null);
+    }
 
+    public void createGameObjects() {
         player = new Player(400,400);
-
         enemies = new ArrayList<>();
+    }
 
-        
-
+    public void createPanel() {
         panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g){
@@ -128,18 +138,27 @@ public class Game implements KeyListener{
                 }
                 g.drawString("Wave: " + wave,680, 40);
             }
-
         };
+    }
 
+    public void setupInput() {
         panel.addMouseListener(new MouseAdapter(){
             @Override
             public void mousePressed(MouseEvent e) {
                 player.shoot(e.getX(), e.getY());
             }
         });
-        
-        window.add(panel);
+
         window.addKeyListener(this);
+    }
+
+    public Game() {
+        createWindow();
+        createGameObjects();
+        createPanel();
+        setupInput();
+
+        window.add(panel);
         window.setVisible(true);
 
         // added after panel added so that layout is calculated and ready to use by spawnWave()
