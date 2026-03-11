@@ -16,7 +16,7 @@ public class Player {
 
     int maxAmmo = 8;
     int currentAmmo = 8;
-    int magazines = 3;
+    int magazines = 30;
 
     int score = 0;
 

@@ -25,6 +25,9 @@ public class Game implements KeyListener{
     Player player;
     ArrayList<Enemy> enemies;
 
+    int wave = 1;
+    int enemiesPerWave = 3;
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
@@ -45,6 +48,17 @@ public class Game implements KeyListener{
     
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public void spawnWave() {
+        enemies.clear();
+
+        for (int i = 0; i < enemiesPerWave; i++) {
+            int spawnX = (int)(Math.random() * panel.getWidth());
+            int spawnY = (int)(Math.random() * panel.getHeight());
+
+            enemies.add(new Enemy(spawnX, spawnY));
+        }
+    }
     
     public void gameLoop() {
         while (true) {
@@ -53,16 +67,21 @@ public class Game implements KeyListener{
             
             for (Enemy e : enemies) {
                 e.update(player);
-                
-                if (!e.alive && System.currentTimeMillis() >= e.respawnTime) {
-                    int spawnX = (int)(Math.random() * panel.getWidth());
-                    int spawnY = (int)(Math.random() * panel.getHeight());
+            }
 
-                    e.x = spawnX;
-                    e.y = spawnY;
-                    e.health = e.maxHealth;
-                    e.alive = true;
+            boolean allEnemiesDead = true;
+
+            for (Enemy e : enemies) {
+                if (e.alive) {
+                    allEnemiesDead = false;
+                    break;
                 }
+            }
+
+            if (allEnemiesDead) {
+                wave++;
+                enemiesPerWave += 2;
+                spawnWave();
             }
 
             // update player bullets
@@ -97,10 +116,7 @@ public class Game implements KeyListener{
 
         enemies = new ArrayList<>();
 
-        enemies.add(new Enemy(100, 100));
-        enemies.add(new Enemy(700, 100));
-        enemies.add(new Enemy(100, 500));
-        enemies.add(new Enemy(700, 500));
+        
 
         panel = new JPanel() {
             @Override
@@ -110,6 +126,7 @@ public class Game implements KeyListener{
                 for (Enemy e : enemies) {
                     e.draw(g);
                 }
+                g.drawString("Wave: " + wave,680, 40);
             }
 
         };
@@ -120,10 +137,13 @@ public class Game implements KeyListener{
                 player.shoot(e.getX(), e.getY());
             }
         });
-
+        
         window.add(panel);
         window.addKeyListener(this);
         window.setVisible(true);
+
+        // added after panel added so that layout is calculated and ready to use by spawnWave()
+        spawnWave();
 
         new Thread(this::gameLoop).start();
     }

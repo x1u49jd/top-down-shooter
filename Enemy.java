@@ -9,9 +9,6 @@ public class Enemy {
     int width = 40, height = 40;
     boolean alive = true;
 
-    long respawnTime = 0;
-    int respawnDelay = 2000;
-
     public Enemy(int startX, int startY) {
         x = startX;
         y = startY;
@@ -52,7 +49,6 @@ public class Enemy {
         if (health <= 0) {
             health = 0;
             alive = false;
-            respawnTime = System.currentTimeMillis() + respawnDelay;
             return true; // enemy died
         }
 
