@@ -132,10 +132,10 @@ public class Game implements KeyListener{
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
-                player.draw(g);
                 for (Enemy e : enemies) {
                     e.draw(g);
                 }
+                player.draw(g);
                 g.drawString("Wave: " + wave,680, 40);
             }
         };
