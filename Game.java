@@ -136,7 +136,7 @@ public class Game implements KeyListener{
                     e.draw(g);
                 }
                 player.draw(g);
-                g.drawString("Wave: " + wave,680, 40);
+                g.drawString("Wave: " + wave, panel.getWidth() - 120, 40);
             }
         };
     }
