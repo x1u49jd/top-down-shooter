@@ -16,9 +16,12 @@ public class Player {
 
     int maxAmmo = 8;
     int currentAmmo = 8;
-    int magazines = 30;
+    int magazines = 2;
 
     int score = 0;
+
+    long lastWalkSound = 0;
+    long walkDelay = 200;
 
     public Player(int startX, int startY) {
         x = startX;
@@ -26,10 +29,18 @@ public class Player {
     }
 
     public void move(boolean up, boolean down, boolean left, boolean right) {
+
+        boolean moving = up || down || left || right;
+
         if (up) {y -= speed;};
         if (down) {y += speed;};
         if (left) {x -= speed;};
         if (right) {x += speed;};
+
+        if (moving && System.currentTimeMillis() - lastWalkSound > walkDelay) {
+            Sound.play("audio/Random171.wav");
+            lastWalkSound = System.currentTimeMillis();
+        }
 
         // moves player according to knockback
         x += knockbackX;
@@ -79,6 +90,7 @@ public class Player {
         health -= amount;
         if (health <= 0) {
             health = 0;
+            Sound.play("audio/Random369.wav");
             System.out.println("Player is dead!");
         }
     }
@@ -109,6 +121,7 @@ public class Player {
         // Store it in knockbackX and knockbackY for smooth sliding in move() later on
         knockbackX = (int) (dx * knockbackStrength);
         knockbackY = (int) (dy * knockbackStrength);
+        Sound.play("audio/Hit7.wav");
     }
 
     public void shoot(double targetX, double targetY) {
@@ -120,9 +133,13 @@ public class Player {
 
             bullets.add(new Bullet(startX, startY, targetX, targetY));
             currentAmmo--;
+            Sound.play("audio/Shoot104.wav");
         }
         if (currentAmmo == 0){
             reload();
+        }
+        if (currentAmmo == 0 && magazines == 0) {
+            Sound.play("audio/Random463.wav");
         }
     }
 
@@ -130,6 +147,7 @@ public class Player {
         if (magazines > 0) {
             currentAmmo = maxAmmo;
             magazines--;
+            Sound.play("audio/Random494.wav");
         }
     }
 

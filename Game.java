@@ -84,6 +84,7 @@ public class Game implements KeyListener{
             if (allEnemiesDead) {
                 wave++;
                 enemiesPerWave += 2;
+                Sound.play("audio/PowerUp1.wav");
                 spawnWave();
             }
     }

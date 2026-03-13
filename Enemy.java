@@ -46,9 +46,12 @@ public class Enemy {
         if (!alive) { return false; };
 
         health -= amount;
+        Sound.play("audio/Hit9.wav");
+
         if (health <= 0) {
             health = 0;
             alive = false;
+            Sound.play("audio/Random98.wav");
             return true; // enemy died
         }
 
