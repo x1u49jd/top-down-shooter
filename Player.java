@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -164,7 +165,7 @@ public class Player {
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
-                if (b.x > e.x && b.x < e.x + e.width && b.y > e.y && b.y < e.y + e.height) {
+                if (b.getBounds().intersects(e.getBounds())) {
 
                     bullets.remove(i);
 
@@ -177,5 +178,9 @@ public class Player {
                 }
             }
         }
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
 }

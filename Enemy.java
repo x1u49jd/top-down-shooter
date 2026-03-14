@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class Enemy {
     int x,y;
@@ -24,8 +25,7 @@ public class Enemy {
         if (y > player.y) {y -= speed;};
 
         // checks collision with player, and causes damage to player
-        if (player.x < x + 40 && player.x + 40 > x &&
-            player.y < y + 40 && player.y + 40 > y) {
+        if (getBounds().intersects(player.getBounds())) {
                 player.takeDamage(1);
                 player.applyKnockback(x, y, knockbackStrength);
             }
@@ -36,7 +36,7 @@ public class Enemy {
         if (alive == false) { return;}
 
         g.setColor(Color.RED);
-        g.fillRect(x, y, 40, 40);
+        g.fillRect(x, y, width, height);
     }
 
     public boolean takeDamage(int amount) {
@@ -56,5 +56,9 @@ public class Enemy {
         }
 
         return false; // enemy didn't die
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
     }
 }

@@ -1,4 +1,5 @@
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.Color;
 
 public class Bullet {
@@ -38,5 +39,9 @@ public class Bullet {
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
         g.fillOval((int) x,(int) y, width, height);
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int) x, (int) y, width, height);
     }
 }
