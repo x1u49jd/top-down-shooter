@@ -28,6 +28,8 @@ public class Game implements KeyListener{
     int wave = 1;
     int enemiesPerWave = 3;
 
+    ArrayList<Item> items;
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
@@ -126,6 +128,10 @@ public class Game implements KeyListener{
     public void createGameObjects() {
         player = new Player(400,400);
         enemies = new ArrayList<>();
+
+        items = new ArrayList<>();
+        items.add(new Item(420, 420, ItemType.MEDKIT));
+        items.add(new Item(470, 470, ItemType.MAGAZINE));
     }
 
     public void createPanel() {
@@ -133,6 +139,9 @@ public class Game implements KeyListener{
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
+                for (Item i : items) {
+                    i.draw(g);
+                }
                 for (Enemy e : enemies) {
                     e.draw(g);
                 }
