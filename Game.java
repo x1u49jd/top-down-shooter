@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game implements KeyListener{
     JFrame window;
@@ -29,6 +30,10 @@ public class Game implements KeyListener{
     int enemiesPerWave = 3;
 
     ArrayList<Item> items;
+
+    int maxItemsOnScreen = 4;
+    long itemsSpawnDelay = 1000;
+    long lastItemSpawnTime = 0;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -60,6 +65,43 @@ public class Game implements KeyListener{
 
             enemies.add(new Enemy(spawnX, spawnY));
         }
+    }
+
+    public void spawnItem() {
+        // tracks how many of each item there already are on the screen
+        int medkitsOnScreen = 0;
+        int magazinesOnScreen = 0;
+
+        for (Item i : items) {
+            if (i.type == ItemType.MEDKIT) {medkitsOnScreen++;}
+            else if (i.type == ItemType.MAGAZINE) {magazinesOnScreen++;};
+        }
+
+        // if the amount exceeds the maximum don't proceed
+        if (items.size() >= maxItemsOnScreen) return;
+
+        Random rand = new Random();
+        
+        int spawnX = (int)(Math.random() * panel.getWidth() - 20);
+        int spawnY = (int)(Math.random() * panel.getHeight() - 20);
+
+        ItemType type;
+        
+        // ensures atleast one Medkit and one Magazine are spawned on the screen at first
+        if (medkitsOnScreen == 0 && magazinesOnScreen == 0) {
+            type = rand.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
+        }
+        else if (medkitsOnScreen == 0) {
+            type = ItemType.MEDKIT;
+        }
+        else if (magazinesOnScreen == 0) {
+            type = ItemType.MAGAZINE;
+        }
+        else {
+            type = rand.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
+        }
+
+        items.add(new Item(spawnX, spawnY, type));
     }
 
     public void updatePlayer() {
@@ -111,6 +153,11 @@ public class Game implements KeyListener{
             // update player bullets
             player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
 
+            if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
+                spawnItem();
+                lastItemSpawnTime = System.currentTimeMillis();
+            }
+
             panel.repaint(); // redraw after moving
 
             // wait 16ms (60fps)
@@ -140,8 +187,6 @@ public class Game implements KeyListener{
         enemies = new ArrayList<>();
 
         items = new ArrayList<>();
-        items.add(new Item(520, 420, ItemType.MEDKIT));
-        items.add(new Item(570, 470, ItemType.MAGAZINE));
     }
 
     public void createPanel() {
