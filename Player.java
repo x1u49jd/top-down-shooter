@@ -183,4 +183,16 @@ public class Player {
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
+
+    public void collectItem (Item item) {
+        if (item.type == ItemType.MEDKIT) {
+            // heal 1 point, but don't go over maxHealth
+            health = Math.min(health + 1, maxHealth);
+        }
+        if (item.type == ItemType.MAGAZINE) {
+            // heal 1 point, but don't go over maxHealth
+            magazines++;
+        }
+        Sound.play("audio/Random60.wav");
+    }
 }

@@ -91,12 +91,23 @@ public class Game implements KeyListener{
             }
     }
 
+    public void checkItemPickup() {
+        for (int i = items.size() - 1; i >= 0; i--) {
+            Item item = items.get(i);
+            if (player.getBounds().intersects(item.getBounds())){
+                player.collectItem(item);
+                items.remove(i);
+            }
+        }
+    }
+
     public void gameLoop() {
         while (true) {
             updatePlayer();
             updateEnemies();
             checkWaveClear();
-            
+            checkItemPickup();
+
             // update player bullets
             player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
 
@@ -110,7 +121,6 @@ public class Game implements KeyListener{
                 e.printStackTrace();
             }
         }
-
     }
 
     public void createWindow() {
@@ -130,8 +140,8 @@ public class Game implements KeyListener{
         enemies = new ArrayList<>();
 
         items = new ArrayList<>();
-        items.add(new Item(420, 420, ItemType.MEDKIT));
-        items.add(new Item(470, 470, ItemType.MAGAZINE));
+        items.add(new Item(520, 420, ItemType.MEDKIT));
+        items.add(new Item(570, 470, ItemType.MAGAZINE));
     }
 
     public void createPanel() {
