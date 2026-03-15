@@ -24,6 +24,12 @@ public class Player {
     long lastWalkSound = 0;
     long walkDelay = 200;
 
+    boolean reloading = false;
+    boolean readyToShoot = true;
+    long reloadTime = 500;
+    long reloadStartTime = 0;
+
+
     public Player(int startX, int startY) {
         x = startX;
         y = startY;
@@ -126,29 +132,33 @@ public class Player {
     }
 
     public void shoot(double targetX, double targetY) {
+        if (readyToShoot) {
+            if (currentAmmo > 0) {
+                // spawn bullet at player's center
+                double startX = x + (width / 2);
+                double startY = y + (height / 2);
 
-        if (currentAmmo > 0) {
-            // spawn bullet at player's center
-            double startX = x + (width / 2);
-            double startY = y + (height / 2);
-
-            bullets.add(new Bullet(startX, startY, targetX, targetY));
-            currentAmmo--;
-            Sound.play("audio/Shoot104.wav");
-        }
-        if (currentAmmo == 0){
-            reload();
-        }
-        if (currentAmmo == 0 && magazines == 0) {
-            Sound.play("audio/Random463.wav");
+                bullets.add(new Bullet(startX, startY, targetX, targetY));
+                currentAmmo--;
+                Sound.play("audio/Shoot104.wav");
+            }
+            if (currentAmmo == 0){
+                reload();
+            }
+            if (currentAmmo == 0 && magazines == 0) {
+                Sound.play("audio/Random463.wav");
+            }
         }
     }
 
     public void reload() {
-        if (magazines > 0) {
-            currentAmmo = maxAmmo;
-            magazines--;
+        if (reloading) return;
+
+        else if (magazines > 0) {
+            readyToShoot = false;
+            reloading = true;
             Sound.play("audio/Random494.wav");
+            reloadStartTime = System.currentTimeMillis();
         }
     }
 

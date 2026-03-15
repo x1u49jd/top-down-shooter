@@ -153,6 +153,15 @@ public class Game implements KeyListener{
             // update player bullets
             player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
 
+            if (player.reloading) {
+                if (System.currentTimeMillis() - player.reloadStartTime >= player.reloadTime) {
+                    player.currentAmmo = player.maxAmmo;
+                    player.magazines--;
+                    player.reloading = false;
+                    player.readyToShoot = true;
+                }
+            }
+
             if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
                 spawnItem();
                 lastItemSpawnTime = System.currentTimeMillis();
