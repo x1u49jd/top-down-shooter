@@ -111,8 +111,8 @@ public class Game implements KeyListener{
 
     public void updateEnemies() {
         for (Enemy e : enemies) {
-            e.update(player);
-        }
+            e.update(player, enemies);
+    }
     }
     
     public void checkWaveClear() {
