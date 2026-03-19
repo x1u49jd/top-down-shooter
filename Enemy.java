@@ -11,12 +11,28 @@ public class Enemy {
     int width = 40, height = 40;
     boolean alive = true;
 
+    double knockbackX, knockbackY;
+    int staggerDuration = 0;
+
     public Enemy(int startX, int startY) {
         x = startX;
         y = startY;
     }
 
     public void update(Player player, ArrayList<Enemy> enemies) {
+
+        // Apply knockback if stagger is active
+        if (staggerDuration > 0) {
+            x += knockbackX;
+            y += knockbackY;
+
+            // optional: slowly reduce knockback for smoothing
+            knockbackX *= 0.9;
+            knockbackY *= 0.9;
+
+            staggerDuration--;
+            return; // enemy is staggered, skip normal movement
+        }
 
         if (alive == false) { return;}
 
@@ -76,7 +92,7 @@ public class Enemy {
         g.fillRect(x, y, width, height);
     }
 
-    public boolean takeDamage(int amount) {
+    public boolean takeDamage(int amount, int sourceX, int sourceY) {
 
         // ignore damage to dead enemies
         // and adding extra score when bullet hit an already dead enemy
@@ -84,6 +100,21 @@ public class Enemy {
 
         health -= amount;
         Sound.play("audio/Hit9.wav");
+
+        // calculate direction from source (player/bullet) to enemy
+        double dx = x - sourceX;
+        double dy = y - sourceY;
+        double distance = Math.sqrt(dx*dx + dy*dy);
+        if (distance != 0) {
+            dx /= distance;
+            dy /= distance;
+        }
+
+        // apply knockback
+        double knockbackStrength = 2;
+        knockbackX = dx * knockbackStrength;
+        knockbackY = dy * knockbackStrength;
+        staggerDuration = 10; // frames to stagger
 
         if (health <= 0) {
             health = 0;

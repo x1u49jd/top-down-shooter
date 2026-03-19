@@ -180,7 +180,7 @@ public class Player {
                     bullets.remove(i);
 
                     // if the enemy died, add a score
-                    if (e.takeDamage(1)) {
+                    if (e.takeDamage(1, this.x, this.y)) {
                         score++;
                     }
 
