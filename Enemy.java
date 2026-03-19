@@ -97,8 +97,8 @@ public class Enemy {
         // ignore damage to dead enemies
         // and adding extra score when bullet hit an already dead enemy
         if (!alive) { return false; };
-
         health -= amount;
+        System.out.println("Sound played");
         Sound.play("audio/Hit9.wav");
 
         // calculate direction from source (player/bullet) to enemy

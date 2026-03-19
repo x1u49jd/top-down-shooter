@@ -98,7 +98,6 @@ public class Player {
         if (health <= 0) {
             health = 0;
             Sound.play("audio/Random369.wav");
-            System.out.println("Player is dead!");
         }
     }
 
@@ -175,8 +174,8 @@ public class Player {
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
-                if (b.getBounds().intersects(e.getBounds())) {
-
+                if (e.alive && b.getBounds().intersects(e.getBounds())) {
+                    System.out.println("Bullet touched enemy");
                     bullets.remove(i);
 
                     // if the enemy died, add a score
