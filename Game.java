@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import java.awt.event.KeyListener;
@@ -8,8 +9,11 @@ import java.awt.event.KeyEvent;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game implements KeyListener{
@@ -35,6 +39,13 @@ public class Game implements KeyListener{
     long itemsSpawnDelay = 1000;
     long lastItemSpawnTime = 0;
 
+    int[][] levelMap;
+    int tileSize = 64; // pixels per tile
+
+    // for centering of the level on the screen
+    int levelOffsetX;
+    int levelOffsetY;
+
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
@@ -55,6 +66,42 @@ public class Game implements KeyListener{
     
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public void loadLevelFromTextFile(String filename) {
+        try {
+        
+        // list to temporarily store each level row before turning it into 2D array
+        List<int[]> rows = new ArrayList<>();
+        
+        // open the text file so we can read it line by line
+        BufferedReader br = new BufferedReader(new FileReader(filename));
+
+        String line;
+
+        // read textfile line by line till the end
+        while ((line = br.readLine()) != null) {
+            // create an array for this line, 
+            // each 0 or 1 in the line becomes one element in the array
+            int[] row = new int[line.length()];
+            for (int i = 0; i < line.length(); i++) {
+                // convert characters 0 and 1 into integer 0 and 1
+                row[i] = Character.getNumericValue(line.charAt(i));
+            }
+            // add this row to the list of rows
+            rows.add(row);
+        }
+        br.close();
+        // convert the list of rows into a 2D array
+        levelMap = rows.toArray(new int[0][]);
+
+        // calculate offsets to center the level
+        levelOffsetX = (panel.getWidth() - levelMap[0].length * tileSize) / 2;
+        levelOffsetY = (panel.getHeight() - levelMap.length * tileSize) / 2;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void spawnWave() {
         enemies.clear();
@@ -203,6 +250,23 @@ public class Game implements KeyListener{
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g); // clears the panel
+
+                // draw the level
+                if (levelMap != null) {
+                    // dynamically center the level on the screen
+                    int offsetX = (getWidth() - levelMap[0].length * tileSize) /2;
+                    int offsetY = (getHeight() - levelMap.length * tileSize) /2;
+
+                    for (int y = 0; y < levelMap.length; y++) {
+                        for (int x = 0; x < levelMap[y].length; x++) {
+                            if (levelMap[y][x] == 1) {
+                                g.setColor(Color.GRAY);
+                                g.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize);
+                            }
+                        }
+                    }
+                }
+    
                 for (Item i : items) {
                     i.draw(g);
                 }
@@ -230,6 +294,7 @@ public class Game implements KeyListener{
         createWindow();
         createGameObjects();
         createPanel();
+        loadLevelFromTextFile("./level.txt");
         setupInput();
 
         window.add(panel);
