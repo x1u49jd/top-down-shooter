@@ -16,7 +16,7 @@ public class Game implements KeyListener{
     JFrame window;
     JPanel panel;
 
-    int windowWidth = 800, windowHeight = 600;
+    int windowWidth = 1440, windowHeight = 900;
 
     boolean upPressed = false;
     boolean downPressed = false;
