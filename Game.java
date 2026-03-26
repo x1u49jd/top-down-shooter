@@ -294,7 +294,7 @@ public class Game implements KeyListener{
         createWindow();
         createGameObjects();
         createPanel();
-        loadLevelFromTextFile("./level.txt");
+        loadLevelFromTextFile("./Level.txt");
         setupInput();
 
         window.add(panel);
