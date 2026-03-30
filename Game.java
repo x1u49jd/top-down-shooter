@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.awt.Font;
 import java.awt.Graphics;
 
 import java.awt.event.KeyListener;
@@ -12,7 +13,15 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Game implements KeyListener{
+public class Game implements KeyListener {
+
+    enum GameState {
+        PLAYING,
+        GAME_OVER
+    }
+
+    GameState gameState = GameState.PLAYING;
+
     JFrame window;
     JPanel panel;
 
@@ -55,6 +64,12 @@ public class Game implements KeyListener{
     
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public void checkGameOver() {
+        if (player.health <= 0) {
+            gameState = GameState.GAME_OVER;
+        }
+    }
 
     public void spawnWave() {
         enemies.clear();
@@ -145,36 +160,40 @@ public class Game implements KeyListener{
 
     public void gameLoop() {
         while (true) {
-            updatePlayer();
-            updateEnemies();
-            checkWaveClear();
-            checkItemPickup();
 
-            // update player bullets
-            player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
+            if (gameState == GameState.PLAYING) {
+                updatePlayer();
+                updateEnemies();
+                checkWaveClear();
+                checkItemPickup();
+                checkGameOver();
 
-            if (player.reloading) {
-                if (System.currentTimeMillis() - player.reloadStartTime >= player.reloadTime) {
-                    player.currentAmmo = player.maxAmmo;
-                    player.magazines--;
-                    player.reloading = false;
-                    player.readyToShoot = true;
+                // update player bullets
+                player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
+
+                if (player.reloading) {
+                    if (System.currentTimeMillis() - player.reloadStartTime >= player.reloadTime) {
+                        player.currentAmmo = player.maxAmmo;
+                        player.magazines--;
+                        player.reloading = false;
+                        player.readyToShoot = true;
+                    }
                 }
-            }
 
-            if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
-                spawnItem();
-                lastItemSpawnTime = System.currentTimeMillis();
-            }
+                if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
+                    spawnItem();
+                    lastItemSpawnTime = System.currentTimeMillis();
+                }
 
-            panel.repaint(); // redraw after moving
+                panel.repaint(); // redraw after moving
 
-            // wait 16ms (60fps)
-            try {
-                Thread.sleep(16);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
+                // wait 16ms (60fps)
+                try {
+                    Thread.sleep(16);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -211,6 +230,21 @@ public class Game implements KeyListener{
                 }
                 player.draw(g);
                 g.drawString("Wave: " + wave, panel.getWidth() - 120, 40);
+
+                if (gameState == GameState.GAME_OVER) {
+                    String text = "Game Over";
+                    Font font = new Font("Arial", Font.BOLD, 80);
+                    g.setFont(font);
+
+                    // get width of text
+                    int textWidth = g.getFontMetrics().stringWidth(text);
+
+                    // calculate center position for text
+                    int x = (panel.getWidth() - textWidth) / 2;
+                    int y = panel.getHeight() / 2;
+
+                    g.drawString(text, x, y);
+                }
             }
         };
     }
