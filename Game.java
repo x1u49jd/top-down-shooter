@@ -32,6 +32,8 @@ public class Game implements KeyListener {
     boolean leftPressed = false;
     boolean rightPressed = false;
 
+    volatile boolean restartRequested = false;
+
     Player player;
     ArrayList<Enemy> enemies;
 
@@ -47,6 +49,11 @@ public class Game implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
+
+        if (gameState == GameState.GAME_OVER && key == KeyEvent.VK_R){
+            restartRequested = true;
+        }
+
         if (key == KeyEvent.VK_W) {upPressed = true;};
         if (key == KeyEvent.VK_S) {downPressed = true;};
         if (key == KeyEvent.VK_A) {leftPressed = true;};
@@ -62,6 +69,29 @@ public class Game implements KeyListener {
         if (key == KeyEvent.VK_D) {rightPressed = false;};
     }
     
+
+    public void restartGame() {
+        gameState = GameState.PLAYING;
+        wave = 1;
+        enemiesPerWave = 3;
+
+        player = new Player(400, 400);
+
+        items.clear();
+        lastItemSpawnTime = System.currentTimeMillis();
+
+        spawnWave();
+
+        upPressed = false;
+        downPressed = false;
+        leftPressed = false;
+        rightPressed = false;
+
+        panel.repaint();
+
+        Sound.play("audio/Blip12.wav");
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {}
 
@@ -161,6 +191,11 @@ public class Game implements KeyListener {
     public void gameLoop() {
         while (true) {
 
+            if (restartRequested) {
+                restartRequested = false;
+                restartGame();
+            }
+
             if (gameState == GameState.PLAYING) {
                 updatePlayer();
                 updateEnemies();
@@ -232,18 +267,38 @@ public class Game implements KeyListener {
                 g.drawString("Wave: " + wave, panel.getWidth() - 120, 40);
 
                 if (gameState == GameState.GAME_OVER) {
-                    String text = "Game Over";
-                    Font font = new Font("Arial", Font.BOLD, 80);
-                    g.setFont(font);
+                    String gameOverText = "Game Over";
+                    String restartText = "Press R to Restart";
+
+                    Font gameOverFont = new Font("Arial", Font.BOLD, 80);
+                    Font restartFont = new Font("Arial", Font.BOLD, 35);
+
+
+                    // GAME OVER
+                    g.setFont(gameOverFont);
 
                     // get width of text
-                    int textWidth = g.getFontMetrics().stringWidth(text);
+                    int gameOverWidth = g.getFontMetrics().stringWidth(gameOverText);
 
                     // calculate center position for text
-                    int x = (panel.getWidth() - textWidth) / 2;
-                    int y = panel.getHeight() / 2;
+                    int gameOverx = (panel.getWidth() - gameOverWidth) / 2;
+                    int gameOvery = panel.getHeight() / 2;
 
-                    g.drawString(text, x, y);
+                    g.drawString(gameOverText, gameOverx, gameOvery);
+
+
+                    // RESTART
+
+                    g.setFont(restartFont);
+                    int restartWidth = g.getFontMetrics().stringWidth(restartText);
+
+                    // calculate center position for text
+                    int restartx = (panel.getWidth() - restartWidth) / 2;
+                    int restarty = panel.getHeight() / 2 + 60;
+
+                    g.drawString(restartText, restartx, restarty);
+
+
                 }
             }
         };
