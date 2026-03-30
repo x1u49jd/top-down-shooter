@@ -97,6 +97,7 @@ public class Game implements KeyListener {
 
     public void checkGameOver() {
         if (player.health <= 0) {
+            player.readyToShoot = false;
             gameState = GameState.GAME_OVER;
         }
     }
