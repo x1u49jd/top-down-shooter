@@ -90,6 +90,21 @@ public class Enemy {
 
         g.setColor(Color.RED);
         g.fillRect(x, y, width, height);
+
+        if (health < maxHealth) {
+            // ---- UI HEALTH BAR ----
+            int barWidth = 40; // same width as player
+            int barHeight = 8;
+
+            // grey background
+            g.setColor(Color.GRAY);
+            g.fillRect(x, y - 15, barWidth, barHeight);
+
+            // health scaled properly
+            g.setColor(Color.RED);
+            int currentWidth = (int)((health / (double)maxHealth) * barWidth);
+            g.fillRect(x, y - 15, currentWidth, barHeight);
+        }
     }
 
     public boolean takeDamage(int amount, int sourceX, int sourceY) {
