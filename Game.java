@@ -104,11 +104,32 @@ public class Game implements KeyListener {
 
     public void spawnWave() {
         enemies.clear();
-
+        int margin = 50; // how far the enemy spawns outside the window
         for (int i = 0; i < enemiesPerWave; i++) {
-            int spawnX = (int)(Math.random() * panel.getWidth());
-            int spawnY = (int)(Math.random() * panel.getHeight());
 
+            int spawnX = 0;
+            int spawnY = 0;
+
+            int side = (int)(Math.random() * 4);
+
+            switch(side){
+                case 0: // top
+                    spawnX = (int)(Math.random() * panel.getWidth());
+                    spawnY = -margin;
+                    break;
+                case 1: // right
+                    spawnX = panel.getWidth() + margin;
+                    spawnY = (int)(Math.random() * panel.getHeight());
+                    break;
+                case 2: // bottom
+                    spawnX = (int)(Math.random() * panel.getWidth());
+                    spawnY = panel.getHeight() + margin;
+                    break;
+                case 3: // left
+                    spawnX = -margin;
+                    spawnY = (int)(Math.random() * panel.getHeight());
+                    break;
+                }
             enemies.add(new Enemy(spawnX, spawnY));
         }
     }
