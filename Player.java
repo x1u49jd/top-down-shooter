@@ -15,9 +15,9 @@ public class Player {
 
     ArrayList<Bullet> bullets = new ArrayList<>();
 
-    int maxAmmo = 8;
-    int currentAmmo = 8;
-    int magazines = 2;
+    int maxAmmo = 16;
+    int currentAmmo = 16;
+    int magazines = 3;
 
     int score = 0;
 
