@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Enemy {
     int x,y;
-    int speed = 1;
+    int speed = 2;
     int health = 3, maxHealth = 3;
     double knockbackStrength = 10;
     int width = 40, height = 40;
