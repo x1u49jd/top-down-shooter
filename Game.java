@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
@@ -289,14 +290,22 @@ public class Game implements KeyListener {
                 g.drawString("Wave: " + wave, panel.getWidth() - 120, 40);
 
                 if (gameState == GameState.GAME_OVER) {
+
+                    // dark transparent overlay
+                    g.setColor(new Color(0, 0, 0, 180));
+                    g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+
                     String gameOverText = "Game Over";
                     String restartText = "Press R to Restart";
+
+                    
 
                     Font gameOverFont = new Font("Arial", Font.BOLD, 80);
                     Font restartFont = new Font("Arial", Font.BOLD, 35);
 
 
                     // GAME OVER
+                    g.setColor(Color.WHITE);
                     g.setFont(gameOverFont);
 
                     // get width of text
