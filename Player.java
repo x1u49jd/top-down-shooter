@@ -131,7 +131,7 @@ public class Player {
     }
 
     public void shoot(double targetX, double targetY) {
-        if (readyToShoot) {
+        if (readyToShoot && health > 0) {
             if (currentAmmo > 0) {
                 // spawn bullet at player's center
                 double startX = x + (width / 2);
