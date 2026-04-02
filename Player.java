@@ -150,14 +150,28 @@ public class Player {
         }
     }
 
+    // starts reload process and records when it began
     public void reload() {
-        if (reloading) return;
-
+        if (reloading) {
+            return;
+        }
         else if (magazines > 0) {
             readyToShoot = false;
             reloading = true;
             Sound.play("audio/Random494.wav");
             reloadStartTime = System.currentTimeMillis();
+        }
+    }
+
+    // completes the reload process once time has passed
+    public void updateReload() {
+        if (reloading) {
+            if (System.currentTimeMillis() - reloadStartTime >= reloadTime) {
+                currentAmmo = maxAmmo;
+                magazines--;
+                reloading = false;
+                readyToShoot = true;
+            }
         }
     }
 
