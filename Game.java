@@ -173,7 +173,6 @@ public class Game implements KeyListener {
             if (gameState == GameState.PLAYING) {
                 updatePlayer();
                 updateEnemies();
-                waveManager.checkWaveClear(enemies, panel.getWidth(), panel.getHeight());
                 checkItemPickup();
                 checkGameOver();
 
@@ -185,6 +184,11 @@ public class Game implements KeyListener {
                 if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
                     spawnItem();
                     lastItemSpawnTime = System.currentTimeMillis();
+                }
+
+                // spawn next wave when all enemies in the current wave are dead
+                if (waveManager.isWaveClear(enemies)) {
+                    waveManager.spawnNextWave(enemies, windowWidth, windowHeight);
                 }
 
                 panel.repaint(); // redraw after moving

@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 
 public class WaveManager {
-    int wave = 1;
+
     int startWave = 1;
-    int enemiesPerWave = 3;
     int startEnemiesPerWave = 3;
+    int wave = 1;
+    int enemiesPerWave = 3;
 
     void spawnWave(ArrayList<Enemy> enemies, int panelWidth, int panelHeight) {
         enemies.clear();
@@ -38,22 +39,17 @@ public class WaveManager {
         }
     }
 
-    void checkWaveClear(ArrayList<Enemy> enemies, int panelWidth, int panelHeight) {
-        boolean allEnemiesDead = true;
+    boolean isWaveClear(ArrayList<Enemy> enemies) {
+        for (Enemy e : enemies) { 
+            if (e.alive) return false; }
+        return true;
+    }
 
-            for (Enemy e : enemies) {
-                if (e.alive) {
-                    allEnemiesDead = false;
-                    break;
-                }
-            }
-
-            if (allEnemiesDead) {
-                wave++;
-                enemiesPerWave += 2;
-                Sound.play("audio/PowerUp1.wav");
-                spawnWave(enemies, panelWidth, panelHeight);
-            }
+    void spawnNextWave(ArrayList<Enemy> enemies, int panelWidth, int panelHeight) {
+        wave++;
+        enemiesPerWave += 2;
+        Sound.play("audio/PowerUp1.wav");
+        spawnWave(enemies, panelWidth, panelHeight);
     }
 
     void resetWave() {
