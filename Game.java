@@ -1,16 +1,12 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -37,9 +33,6 @@ public class Game implements KeyListener {
 
     Player player;
     ArrayList<Enemy> enemies;
-
-    
-
     ArrayList<Item> items;
 
     int maxItemsOnScreen = 4;
@@ -71,7 +64,6 @@ public class Game implements KeyListener {
         if (key == KeyEvent.VK_D) {rightPressed = false;};
     }
     
-
     public void restartGame() {
         gameState = GameState.PLAYING;
         waveManager.resetWave();
@@ -101,8 +93,6 @@ public class Game implements KeyListener {
             gameState = GameState.GAME_OVER;
         }
     }
-
-    
 
     public void spawnItem() {
         // tracks how many of each item there already are on the screen
@@ -149,7 +139,7 @@ public class Game implements KeyListener {
     public void updateEnemies() {
         for (Enemy e : enemies) {
             e.update(player, enemies);
-    }
+        }
     }
 
     public void checkItemPickup() {
@@ -164,7 +154,6 @@ public class Game implements KeyListener {
 
     public void gameLoop() {
         while (true) {
-
             if (restartRequested) {
                 restartRequested = false;
                 restartGame();
@@ -246,8 +235,6 @@ public class Game implements KeyListener {
                     String gameOverText = "Game Over";
                     String restartText = "Press R to Restart";
 
-                    
-
                     Font gameOverFont = new Font("Arial", Font.BOLD, 80);
                     Font restartFont = new Font("Arial", Font.BOLD, 35);
 
@@ -264,7 +251,6 @@ public class Game implements KeyListener {
                     int gameOvery = panel.getHeight() / 2;
 
                     g.drawString(gameOverText, gameOverx, gameOvery);
-
 
                     // RESTART
 
@@ -299,7 +285,6 @@ public class Game implements KeyListener {
         createGameObjects();
         createPanel();
         setupInput();
-
         window.add(panel);
         window.setVisible(true);
 
