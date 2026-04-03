@@ -38,14 +38,15 @@ public class Game implements KeyListener {
     Player player;
     ArrayList<Enemy> enemies;
 
-    int wave = 1;
-    int enemiesPerWave = 3;
+    
 
     ArrayList<Item> items;
 
     int maxItemsOnScreen = 4;
     long itemsSpawnDelay = 1000;
     long lastItemSpawnTime = 0;
+
+    WaveManager waveManager = new WaveManager();
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -73,15 +74,14 @@ public class Game implements KeyListener {
 
     public void restartGame() {
         gameState = GameState.PLAYING;
-        wave = 1;
-        enemiesPerWave = 3;
+        waveManager.resetWave();
 
         player = new Player(400, 400);
 
         items.clear();
         lastItemSpawnTime = System.currentTimeMillis();
 
-        spawnWave();
+        waveManager.spawnWave(enemies, panel.getWidth(), panel.getHeight());
 
         upPressed = false;
         downPressed = false;
@@ -102,37 +102,7 @@ public class Game implements KeyListener {
         }
     }
 
-    public void spawnWave() {
-        enemies.clear();
-        int margin = 50; // how far the enemy spawns outside the window
-        for (int i = 0; i < enemiesPerWave; i++) {
-
-            int spawnX = 0;
-            int spawnY = 0;
-
-            int side = (int)(Math.random() * 4);
-
-            switch(side){
-                case 0: // top
-                    spawnX = (int)(Math.random() * panel.getWidth());
-                    spawnY = -margin;
-                    break;
-                case 1: // right
-                    spawnX = panel.getWidth() + margin;
-                    spawnY = (int)(Math.random() * panel.getHeight());
-                    break;
-                case 2: // bottom
-                    spawnX = (int)(Math.random() * panel.getWidth());
-                    spawnY = panel.getHeight() + margin;
-                    break;
-                case 3: // left
-                    spawnX = -margin;
-                    spawnY = (int)(Math.random() * panel.getHeight());
-                    break;
-                }
-            enemies.add(new Enemy(spawnX, spawnY));
-        }
-    }
+    
 
     public void spawnItem() {
         // tracks how many of each item there already are on the screen
@@ -181,24 +151,6 @@ public class Game implements KeyListener {
             e.update(player, enemies);
     }
     }
-    
-    public void checkWaveClear() {
-        boolean allEnemiesDead = true;
-
-            for (Enemy e : enemies) {
-                if (e.alive) {
-                    allEnemiesDead = false;
-                    break;
-                }
-            }
-
-            if (allEnemiesDead) {
-                wave++;
-                enemiesPerWave += 2;
-                Sound.play("audio/PowerUp1.wav");
-                spawnWave();
-            }
-    }
 
     public void checkItemPickup() {
         for (int i = items.size() - 1; i >= 0; i--) {
@@ -221,7 +173,7 @@ public class Game implements KeyListener {
             if (gameState == GameState.PLAYING) {
                 updatePlayer();
                 updateEnemies();
-                checkWaveClear();
+                waveManager.checkWaveClear(enemies, panel.getWidth(), panel.getHeight());
                 checkItemPickup();
                 checkGameOver();
 
@@ -279,7 +231,7 @@ public class Game implements KeyListener {
                     e.draw(g);
                 }
                 player.draw(g);
-                g.drawString("Wave: " + wave, panel.getWidth() - 120, 40);
+                g.drawString("Wave: " + waveManager.wave, panel.getWidth() - 120, 40);
 
                 if (gameState == GameState.GAME_OVER) {
 
@@ -348,7 +300,7 @@ public class Game implements KeyListener {
         window.setVisible(true);
 
         // added after panel added so that layout is calculated and ready to use by spawnWave()
-        spawnWave();
+        waveManager.spawnWave(enemies, panel.getWidth(), panel.getHeight());
 
         new Thread(this::gameLoop).start();
     }
