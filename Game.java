@@ -131,11 +131,6 @@ public class Game implements KeyListener {
         items.add(new Item(spawnX, spawnY, type));
     }
 
-    public void updatePlayer() {
-        // update player position based on keys pressed
-        player.move(upPressed, downPressed, leftPressed, rightPressed);
-    }
-
     public void updateEnemies() {
         for (Enemy e : enemies) {
             e.update(player, enemies);
@@ -160,15 +155,11 @@ public class Game implements KeyListener {
             }
 
             if (gameState == GameState.PLAYING) {
-                updatePlayer();
+                // update player's position based on keys pressed, bullets, reload
+                player.update(upPressed, downPressed, leftPressed, rightPressed, windowWidth, windowHeight, enemies);
                 updateEnemies();
                 checkItemPickup();
                 checkGameOver();
-
-                // update player bullets
-                player.updateBullets(panel.getWidth(), panel.getHeight(), enemies);
-
-                player.updateReload();
 
                 if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
                     spawnItem();

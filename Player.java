@@ -35,6 +35,12 @@ public class Player {
         y = startY;
     }
 
+    public void update(boolean up, boolean down, boolean left, boolean right, int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
+        move(up, down, left, right);
+        updateReload();
+        updateBullets(windowWidth, windowHeight, enemies);
+    }
+
     public void move(boolean up, boolean down, boolean left, boolean right) {
 
         boolean moving = up || down || left || right;
