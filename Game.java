@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Game implements KeyListener {
 
@@ -27,11 +26,8 @@ public class Game implements KeyListener {
     ArrayList<Enemy> enemies;
     ArrayList<Item> items;
 
-    int maxItemsOnScreen = 4;
-    long itemsSpawnDelay = 1000;
-    long lastItemSpawnTime = 0;
-
     WaveManager waveManager = new WaveManager();
+    ItemSpawnManager itemSpawnManager;
     GamePanel panel;
 
     @Override
@@ -63,7 +59,7 @@ public class Game implements KeyListener {
         player = new Player(400, 400);
         panel.setPlayer(player);
         items.clear();
-        lastItemSpawnTime = System.currentTimeMillis();
+        itemSpawnManager.lastItemSpawnTime = System.currentTimeMillis();
 
         waveManager.spawnWave(enemies, panel.getWidth(), panel.getHeight());
 
@@ -84,43 +80,6 @@ public class Game implements KeyListener {
         if (player.health <= 0) {
             gameState = GameState.GAME_OVER;
         }
-    }
-
-    public void spawnItem() {
-        // tracks how many of each item there already are on the screen
-        int medkitsOnScreen = 0;
-        int magazinesOnScreen = 0;
-
-        for (Item i : items) {
-            if (i.type == Item.ItemType.MEDKIT) {medkitsOnScreen++;}
-            else if (i.type == Item.ItemType.MAGAZINE) {magazinesOnScreen++;};
-        }
-
-        // if the amount exceeds the maximum don't proceed
-        if (items.size() >= maxItemsOnScreen) return;
-
-        Random rand = new Random();
-        
-        int spawnX = (int)(Math.random() * panel.getWidth() - 20);
-        int spawnY = (int)(Math.random() * panel.getHeight() - 20);
-
-        Item.ItemType type;
-        
-        // ensures atleast one Medkit and one Magazine are spawned on the screen at first
-        if (medkitsOnScreen == 0 && magazinesOnScreen == 0) {
-            type = rand.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
-        }
-        else if (medkitsOnScreen == 0) {
-            type = Item.ItemType.MEDKIT;
-        }
-        else if (magazinesOnScreen == 0) {
-            type = Item.ItemType.MAGAZINE;
-        }
-        else {
-            type = rand.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
-        }
-
-        items.add(new Item(spawnX, spawnY, type));
     }
 
     public void updateEnemies() {
@@ -152,11 +111,7 @@ public class Game implements KeyListener {
                 updateEnemies();
                 checkItemPickup();
                 checkGameOver();
-
-                if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
-                    spawnItem();
-                    lastItemSpawnTime = System.currentTimeMillis();
-                }
+                itemSpawnManager.update(panel.getWidth(), panel.getHeight());
 
                 // spawn next wave when all enemies in the current wave are dead
                 if (waveManager.isWaveClear(enemies)) {
@@ -216,6 +171,7 @@ public class Game implements KeyListener {
         window.setVisible(true);
 
         // added after panel added so that layout is calculated and ready to use by spawnWave()
+        itemSpawnManager = new ItemSpawnManager(items);
         waveManager.spawnWave(enemies, panel.getWidth(), panel.getHeight());
 
         new Thread(this::gameLoop).start();
