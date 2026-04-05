@@ -3,6 +3,12 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class Item {
+
+    enum ItemType {
+        MEDKIT,
+        MAGAZINE
+    }
+
     int x,y;
     int width = 20;
     int height = 20;

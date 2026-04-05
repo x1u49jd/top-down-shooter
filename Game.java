@@ -92,8 +92,8 @@ public class Game implements KeyListener {
         int magazinesOnScreen = 0;
 
         for (Item i : items) {
-            if (i.type == ItemType.MEDKIT) {medkitsOnScreen++;}
-            else if (i.type == ItemType.MAGAZINE) {magazinesOnScreen++;};
+            if (i.type == Item.ItemType.MEDKIT) {medkitsOnScreen++;}
+            else if (i.type == Item.ItemType.MAGAZINE) {magazinesOnScreen++;};
         }
 
         // if the amount exceeds the maximum don't proceed
@@ -104,20 +104,20 @@ public class Game implements KeyListener {
         int spawnX = (int)(Math.random() * panel.getWidth() - 20);
         int spawnY = (int)(Math.random() * panel.getHeight() - 20);
 
-        ItemType type;
+        Item.ItemType type;
         
         // ensures atleast one Medkit and one Magazine are spawned on the screen at first
         if (medkitsOnScreen == 0 && magazinesOnScreen == 0) {
-            type = rand.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
+            type = rand.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
         }
         else if (medkitsOnScreen == 0) {
-            type = ItemType.MEDKIT;
+            type = Item.ItemType.MEDKIT;
         }
         else if (magazinesOnScreen == 0) {
-            type = ItemType.MAGAZINE;
+            type = Item.ItemType.MAGAZINE;
         }
         else {
-            type = rand.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
+            type = rand.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
         }
 
         items.add(new Item(spawnX, spawnY, type));

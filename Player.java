@@ -214,11 +214,11 @@ public class Player {
     }
 
     public void collectItem (Item item) {
-        if (item.type == ItemType.MEDKIT) {
+        if (item.type == Item.ItemType.MEDKIT) {
             // heal 1 point, but don't go over maxHealth
             health = Math.min(health + 1, maxHealth);
         }
-        if (item.type == ItemType.MAGAZINE) {
+        if (item.type == Item.ItemType.MAGAZINE) {
             // heal 1 point, but don't go over maxHealth
             magazines++;
         }
