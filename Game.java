@@ -16,7 +16,7 @@ public class Game implements KeyListener {
 
     JFrame window;
 
-    int windowWidth = 1440, windowHeight = 900;
+    int initialWindowWidth = 1440, initialWindowHeight = 900;
 
     boolean upPressed, downPressed, leftPressed, rightPressed = false;
 
@@ -107,7 +107,7 @@ public class Game implements KeyListener {
 
             if (gameState == GameState.PLAYING) {
                 // update player's position based on keys pressed, bullets, reload
-                player.update(upPressed, downPressed, leftPressed, rightPressed, windowWidth, windowHeight, enemies);
+                player.update(upPressed, downPressed, leftPressed, rightPressed, panel.getWidth(), panel.getHeight(), enemies);
                 updateEnemies();
                 checkItemPickup();
                 checkGameOver();
@@ -115,7 +115,7 @@ public class Game implements KeyListener {
 
                 // spawn next wave when all enemies in the current wave are dead
                 if (waveManager.isWaveClear(enemies)) {
-                    waveManager.spawnNextWave(enemies, windowWidth, windowHeight);
+                    waveManager.spawnNextWave(enemies, panel.getWidth(), panel.getHeight());
                 }
 
                 panel.setGameState(gameState);
@@ -134,7 +134,7 @@ public class Game implements KeyListener {
 
     public void createWindow() {
         window = new JFrame();
-        window.setSize(windowWidth, windowHeight);
+        window.setSize(initialWindowWidth, initialWindowHeight);
         window.setTitle("Top Down Shooter");
 
         // tells Java that when X is clicked, end the program
