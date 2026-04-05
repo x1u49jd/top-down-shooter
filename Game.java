@@ -19,10 +19,7 @@ public class Game implements KeyListener {
 
     int windowWidth = 1440, windowHeight = 900;
 
-    boolean upPressed = false;
-    boolean downPressed = false;
-    boolean leftPressed = false;
-    boolean rightPressed = false;
+    boolean upPressed, downPressed, leftPressed, rightPressed = false;
 
     volatile boolean restartRequested = false;
 
