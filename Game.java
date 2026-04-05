@@ -1,8 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -20,7 +16,6 @@ public class Game implements KeyListener {
     GameState gameState = GameState.PLAYING;
 
     JFrame window;
-    JPanel panel;
 
     int windowWidth = 1440, windowHeight = 900;
 
@@ -40,6 +35,7 @@ public class Game implements KeyListener {
     long lastItemSpawnTime = 0;
 
     WaveManager waveManager = new WaveManager();
+    GamePanel panel;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -69,7 +65,7 @@ public class Game implements KeyListener {
         waveManager.resetWave();
 
         player = new Player(400, 400);
-
+        panel.setPlayer(player);
         items.clear();
         lastItemSpawnTime = System.currentTimeMillis();
 
@@ -171,6 +167,7 @@ public class Game implements KeyListener {
                     waveManager.spawnNextWave(enemies, windowWidth, windowHeight);
                 }
 
+                panel.setGameState(gameState);
                 panel.repaint(); // redraw after moving
 
                 // wait 16ms (60fps)
@@ -203,63 +200,6 @@ public class Game implements KeyListener {
         items = new ArrayList<>();
     }
 
-    public void createPanel() {
-        panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g){
-                super.paintComponent(g); // clears the panel
-                for (Item i : items) {
-                    i.draw(g);
-                }
-                for (Enemy e : enemies) {
-                    e.draw(g);
-                }
-                player.draw(g);
-                g.drawString("Wave: " + waveManager.wave, panel.getWidth() - 120, 40);
-
-                if (gameState == GameState.GAME_OVER) {
-
-                    // dark transparent overlay
-                    g.setColor(new Color(0, 0, 0, 180));
-                    g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-
-                    String gameOverText = "Game Over";
-                    String restartText = "Press R to Restart";
-
-                    Font gameOverFont = new Font("Arial", Font.BOLD, 80);
-                    Font restartFont = new Font("Arial", Font.BOLD, 35);
-
-
-                    // GAME OVER
-                    g.setColor(Color.WHITE);
-                    g.setFont(gameOverFont);
-
-                    // get width of text
-                    int gameOverWidth = g.getFontMetrics().stringWidth(gameOverText);
-
-                    // calculate center position for text
-                    int gameOverx = (panel.getWidth() - gameOverWidth) / 2;
-                    int gameOvery = panel.getHeight() / 2;
-
-                    g.drawString(gameOverText, gameOverx, gameOvery);
-
-                    // RESTART
-
-                    g.setFont(restartFont);
-                    int restartWidth = g.getFontMetrics().stringWidth(restartText);
-
-                    // calculate center position for text
-                    int restartx = (panel.getWidth() - restartWidth) / 2;
-                    int restarty = panel.getHeight() / 2 + 60;
-
-                    g.drawString(restartText, restartx, restarty);
-
-
-                }
-            }
-        };
-    }
-
     public void setupInput() {
         panel.addMouseListener(new MouseAdapter(){
             @Override
@@ -274,7 +214,7 @@ public class Game implements KeyListener {
     public Game() {
         createWindow();
         createGameObjects();
-        createPanel();
+        panel = new GamePanel(player, items, enemies, waveManager);
         setupInput();
         window.add(panel);
         window.setVisible(true);
