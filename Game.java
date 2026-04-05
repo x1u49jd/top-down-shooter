@@ -41,7 +41,6 @@ public class Game implements KeyListener {
         if (gameState == GameState.GAME_OVER && key == KeyEvent.VK_R){
             restartRequested = true;
         }
-
         if (key == KeyEvent.VK_W) {upPressed = true;};
         if (key == KeyEvent.VK_S) {downPressed = true;};
         if (key == KeyEvent.VK_A) {leftPressed = true;};

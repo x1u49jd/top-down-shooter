@@ -53,7 +53,6 @@ public class GamePanel extends JPanel{
             Font gameOverFont = new Font("Arial", Font.BOLD, 80);
             Font restartFont = new Font("Arial", Font.BOLD, 35);
 
-
             // GAME OVER
             g.setColor(Color.WHITE);
             g.setFont(gameOverFont);
@@ -77,8 +76,6 @@ public class GamePanel extends JPanel{
             int restarty = getHeight() / 2 + 60;
 
             g.drawString(restartText, restartx, restarty);
-
-
         }
     }
 }

@@ -79,9 +79,7 @@ public class Enemy {
                 x += dx * pushStrength;
                 y += dy * pushStrength;
             }
-
         }
-        
     }
 
     public void draw(Graphics g) {
