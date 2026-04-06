@@ -1,0 +1,58 @@
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+public class InputHandler implements KeyListener, MouseListener {
+    boolean upPressed, downPressed, leftPressed, rightPressed, restartRequested = false;
+
+    Player player;
+    
+    public InputHandler(Player player) {
+        this.player = player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_W) {upPressed = true;};
+        if (key == KeyEvent.VK_S) {downPressed = true;};
+        if (key == KeyEvent.VK_A) {leftPressed = true;};
+        if (key == KeyEvent.VK_D) {rightPressed = true;};
+        if (key == KeyEvent.VK_R) {restartRequested = true;}
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_W) {upPressed = false;};
+        if (key == KeyEvent.VK_S) {downPressed = false;};
+        if (key == KeyEvent.VK_A) {leftPressed = false;};
+        if (key == KeyEvent.VK_D) {rightPressed = false;};
+        if (key == KeyEvent.VK_R) {restartRequested = false;}
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        player.shoot(e.getX(), e.getY());
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+}

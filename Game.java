@@ -1,11 +1,7 @@
 import javax.swing.JFrame;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Game implements KeyListener {
+public class Game {
 
     enum GameState {
         PLAYING,
@@ -18,8 +14,6 @@ public class Game implements KeyListener {
 
     int initialWindowWidth = 1440, initialWindowHeight = 900;
 
-    boolean upPressed, downPressed, leftPressed, rightPressed = false;
-
     volatile boolean restartRequested = false;
 
     Player player;
@@ -29,52 +23,29 @@ public class Game implements KeyListener {
     WaveManager waveManager = new WaveManager();
     ItemSpawnManager itemSpawnManager;
     GamePanel panel;
+    InputHandler input;
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-
-        if (gameState == GameState.GAME_OVER && key == KeyEvent.VK_R){
-            restartRequested = true;
-        }
-        if (key == KeyEvent.VK_W) {upPressed = true;};
-        if (key == KeyEvent.VK_S) {downPressed = true;};
-        if (key == KeyEvent.VK_A) {leftPressed = true;};
-        if (key == KeyEvent.VK_D) {rightPressed = true;};
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_W) {upPressed = false;};
-        if (key == KeyEvent.VK_S) {downPressed = false;};
-        if (key == KeyEvent.VK_A) {leftPressed = false;};
-        if (key == KeyEvent.VK_D) {rightPressed = false;};
-    }
-    
     public void restartGame() {
         gameState = GameState.PLAYING;
         waveManager.resetWave();
 
         player = new Player(400, 400);
         panel.setPlayer(player);
+        input.setPlayer(player);
         items.clear();
         itemSpawnManager.lastItemSpawnTime = System.currentTimeMillis();
 
         waveManager.spawnWave(enemies, panel.getWidth(), panel.getHeight());
 
-        upPressed = false;
-        downPressed = false;
-        leftPressed = false;
-        rightPressed = false;
+        input.upPressed = false;
+        input.downPressed = false;
+        input.leftPressed = false;
+        input.rightPressed = false;
 
         panel.repaint();
 
         Sound.play("audio/Blip12.wav");
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
 
     public void checkGameOver() {
         if (player.health <= 0) {
@@ -107,7 +78,7 @@ public class Game implements KeyListener {
 
             if (gameState == GameState.PLAYING) {
                 // update player's position based on keys pressed, bullets, reload
-                player.update(upPressed, downPressed, leftPressed, rightPressed, panel.getWidth(), panel.getHeight(), enemies);
+                player.update(input.upPressed, input.downPressed, input.leftPressed, input.rightPressed, panel.getWidth(), panel.getHeight(), enemies);
                 updateEnemies();
                 checkItemPickup();
                 checkGameOver();
@@ -128,6 +99,9 @@ public class Game implements KeyListener {
                 catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            if (gameState == Game.GameState.GAME_OVER && input.restartRequested){
+                restartRequested = true;
             }
         }
     }
@@ -152,20 +126,15 @@ public class Game implements KeyListener {
     }
 
     public void setupInput() {
-        panel.addMouseListener(new MouseAdapter(){
-            @Override
-            public void mousePressed(MouseEvent e) {
-                player.shoot(e.getX(), e.getY());
-            }
-        });
-
-        window.addKeyListener(this);
+        panel.addMouseListener(input);
+        window.addKeyListener(input);
     }
 
     public Game() {
         createWindow();
         createGameObjects();
         panel = new GamePanel(player, items, enemies, waveManager);
+        input = new InputHandler(player);
         setupInput();
         window.add(panel);
         window.setVisible(true);
