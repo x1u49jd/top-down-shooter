@@ -17,7 +17,7 @@ public class Game {
 
     Player player;
 
-    WaveManager waveManager = new WaveManager();
+    WaveManager waveManager;
     ItemManager itemManager;
     ItemSpawnManager itemSpawnManager;
     EnemyManager enemyManager;
@@ -115,6 +115,8 @@ public class Game {
         createGameObjects();
         enemyManager = new EnemyManager();
         itemManager = new ItemManager();
+        waveManager = new WaveManager();
+        itemSpawnManager = new ItemSpawnManager();
         panel = new GamePanel(player, itemManager.getItems(), enemyManager.getEnemies(), waveManager);
         input = new InputHandler(player);
         setupInput();
@@ -122,7 +124,6 @@ public class Game {
         window.setVisible(true);
 
         // added after panel added so that layout is calculated and ready to use by spawnWave()
-        itemSpawnManager = new ItemSpawnManager();
         waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
 
         new Thread(this::gameLoop).start();
