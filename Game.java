@@ -117,7 +117,7 @@ public class Game {
         itemManager = new ItemManager();
         waveManager = new WaveManager();
         itemSpawnManager = new ItemSpawnManager();
-        panel = new GamePanel(player, itemManager.getItems(), enemyManager.getEnemies(), waveManager);
+        panel = new GamePanel(player, itemManager, enemyManager, waveManager);
         input = new InputHandler(player);
         setupInput();
         window.add(panel);

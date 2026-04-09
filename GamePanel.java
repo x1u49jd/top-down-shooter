@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -7,18 +6,17 @@ import java.awt.Graphics;
 public class GamePanel extends JPanel{
     
     Player player;
-    ArrayList<Item> items;
-    ArrayList<Enemy> enemies;
+    ItemManager itemManager;
+    EnemyManager enemyManager;
     WaveManager waveManager;
     Game.GameState gameState;
 
 
-    public GamePanel(Player player, ArrayList<Item> items, ArrayList<Enemy> enemies, WaveManager waveManager) {
+    public GamePanel(Player player, ItemManager itemManager, EnemyManager enemyManager, WaveManager waveManager) {
         this.player = player;
-        this.items = items;
-        this.enemies = enemies;
+        this.itemManager = itemManager;
+        this.enemyManager = enemyManager;
         this.waveManager = waveManager;
-
     }
 
     public void setGameState(Game.GameState gameState) {
@@ -32,10 +30,10 @@ public class GamePanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g); // clears the panel
-        for (Item i : items) {
+        for (Item i : itemManager.getItems()) {
             i.draw(g);
         }
-        for (Enemy e : enemies) {
+        for (Enemy e : enemyManager.getEnemies()) {
             e.draw(g);
         }
         player.draw(g);
