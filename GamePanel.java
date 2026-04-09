@@ -3,7 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-public class GamePanel extends JPanel{
+public class GamePanel extends JPanel {
     
     Player player;
     ItemManager itemManager;
