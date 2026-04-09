@@ -1,5 +1,4 @@
 import javax.swing.JFrame;
-import java.util.ArrayList;
 
 public class Game {
 
@@ -17,9 +16,9 @@ public class Game {
     volatile boolean restartRequested = false;
 
     Player player;
-    ArrayList<Item> items;
 
     WaveManager waveManager = new WaveManager();
+    ItemManager itemManager;
     ItemSpawnManager itemSpawnManager;
     EnemyManager enemyManager;
     GamePanel panel;
@@ -32,7 +31,7 @@ public class Game {
         player = new Player(400, 400);
         panel.setPlayer(player);
         input.setPlayer(player);
-        items.clear();
+        itemManager.clearItems();
         itemSpawnManager.lastItemSpawnTime = System.currentTimeMillis();
 
         waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
@@ -53,16 +52,6 @@ public class Game {
         }
     }
 
-    public void checkItemPickup() {
-        for (int i = items.size() - 1; i >= 0; i--) {
-            Item item = items.get(i);
-            if (player.getBounds().intersects(item.getBounds())){
-                player.collectItem(item);
-                items.remove(i);
-            }
-        }
-    }
-
     public void gameLoop() {
         while (true) {
             if (restartRequested) {
@@ -74,9 +63,9 @@ public class Game {
                 // update player's position based on keys pressed, bullets, reload
                 player.update(input.upPressed, input.downPressed, input.leftPressed, input.rightPressed, panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
                 enemyManager.update(player);
-                checkItemPickup();
+                itemManager.checkItemPickup(player);
                 checkGameOver();
-                itemSpawnManager.update(panel.getWidth(), panel.getHeight());
+                itemSpawnManager.update(itemManager ,panel.getWidth(), panel.getHeight());
 
                 // spawn next wave when all enemies in the current wave are dead
                 if (enemyManager.areAllDead()) {
@@ -114,9 +103,6 @@ public class Game {
 
     public void createGameObjects() {
         player = new Player(400,400);
-        //enemies = new ArrayList<>();
-
-        items = new ArrayList<>();
     }
 
     public void setupInput() {
@@ -128,14 +114,15 @@ public class Game {
         createWindow();
         createGameObjects();
         enemyManager = new EnemyManager();
-        panel = new GamePanel(player, items, enemyManager.getEnemies(), waveManager);
+        itemManager = new ItemManager();
+        panel = new GamePanel(player, itemManager.getItems(), enemyManager.getEnemies(), waveManager);
         input = new InputHandler(player);
         setupInput();
         window.add(panel);
         window.setVisible(true);
 
         // added after panel added so that layout is calculated and ready to use by spawnWave()
-        itemSpawnManager = new ItemSpawnManager(items);
+        itemSpawnManager = new ItemSpawnManager();
         waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
 
         new Thread(this::gameLoop).start();

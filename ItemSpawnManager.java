@@ -1,29 +1,18 @@
-import java.util.ArrayList;
 import java.util.Random;
 
 public class ItemSpawnManager {
     
-    ArrayList<Item> items;
     int maxItemsOnScreen = 4;
     long itemsSpawnDelay = 1000;
     long lastItemSpawnTime = 0;
 
-    public ItemSpawnManager(ArrayList<Item> items) {
-        this.items = items;
-    }
-
-    public void spawnItem(int panelWidth, int panelHeight) {
-        // tracks how many of each item there already are on the screen
-        int medkitsOnScreen = 0;
-        int magazinesOnScreen = 0;
-
-        for (Item i : items) {
-            if (i.type == Item.ItemType.MEDKIT) {medkitsOnScreen++;}
-            else if (i.type == Item.ItemType.MAGAZINE) {magazinesOnScreen++;};
-        }
+    public void spawnItem(ItemManager itemManager, int panelWidth, int panelHeight) {
+        // counts how many of each item there already are on the screen
+        int medkitsOnScreen = itemManager.countType(Item.ItemType.MEDKIT);
+        int magazinesOnScreen = itemManager.countType(Item.ItemType.MAGAZINE);
 
         // if the amount exceeds the maximum don't proceed
-        if (items.size() >= maxItemsOnScreen) return;
+        if (itemManager.getSize() >= maxItemsOnScreen) return;
 
         Random rand = new Random();
         
@@ -46,13 +35,13 @@ public class ItemSpawnManager {
             type = rand.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
         }
 
-        items.add(new Item(spawnX, spawnY, type));
+        itemManager.addItem(new Item(spawnX, spawnY, type));
     }
 
 
-    public void update(int width, int height) {
-        if (items.size() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
-            spawnItem(width, height);
+    public void update(ItemManager itemManager, int width, int height) {
+        if (itemManager.getSize() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
+            spawnItem(itemManager, width, height);
             lastItemSpawnTime = System.currentTimeMillis();
         }
     }
