@@ -4,15 +4,15 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Enemy {
-    int x,y;
-    int speed = 2;
-    int health = 3, maxHealth = 3;
-    double knockbackStrength = 10;
-    int width = 40, height = 40;
-    boolean alive = true;
+    private int x,y;
+    private int speed = 2;
+    private int health = 3, maxHealth = 3;
+    private double knockbackStrength = 10;
+    private int width = 40, height = 40;
+    private boolean alive = true;
 
-    double knockbackX, knockbackY;
-    int staggerDuration = 0;
+    private double knockbackX, knockbackY;
+    private int staggerDuration = 0;
 
     public Enemy(int startX, int startY) {
         x = startX;
@@ -36,10 +36,10 @@ public class Enemy {
 
         if (alive == false) { return;}
 
-        if (x < player.x) {x += speed;};
-        if (x > player.x) {x -= speed;};
-        if (y < player.y) {y += speed;};
-        if (y > player.y) {y -= speed;};
+        if (x < player.getX()) {x += speed;};
+        if (x > player.getX()) {x -= speed;};
+        if (y < player.getY()) {y += speed;};
+        if (y > player.getY()) {y -= speed;};
 
         // checks collision with player, and causes damage to player
         if (getBounds().intersects(player.getBounds())) {
@@ -141,5 +141,9 @@ public class Enemy {
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
+    }
+
+    public boolean isAlive(){
+        return alive;
     }
 }

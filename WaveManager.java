@@ -1,11 +1,11 @@
 public class WaveManager {
 
-    int startWave = 1;
-    int startEnemiesPerWave = 3;
-    int wave = 1;
-    int enemiesPerWave = 3;
+    private int startWave = 1;
+    private int startEnemiesPerWave = 3;
+    private int wave = 1;
+    private int enemiesPerWave = 3;
 
-    void spawnWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
+    public void spawnWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
         enemyManager.clearEnemies();
         int margin = 50; // how far the enemy spawns outside the window
         for (int i = 0; i < enemiesPerWave; i++) {
@@ -37,15 +37,19 @@ public class WaveManager {
         }
     }
 
-    void spawnNextWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
+    public void spawnNextWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
         wave++;
         enemiesPerWave += 2;
         Sound.play("audio/PowerUp1.wav");
         spawnWave(enemyManager, panelWidth, panelHeight);
     }
 
-    void resetWave() {
+    public void resetWave() {
         wave = startWave;
         enemiesPerWave = startEnemiesPerWave;
+    }
+
+    public int getWave() {
+        return wave;
     }
 }

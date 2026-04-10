@@ -27,7 +27,7 @@ public class EnemyManager {
 
     public boolean areAllDead() {
         for (Enemy e : enemies) { 
-            if (e.alive) return false; }
+            if (e.isAlive()) return false; }
         return true;
     }
 }

@@ -6,28 +6,28 @@ import java.util.ArrayList;
 
 
 public class Player {
-    int x,y;
-    int speed = 6;
-    int health = 5, maxHealth = 5;
-    int knockbackX, knockbackY;
-    int width = 40;
-    int height = 40;
+    private int x,y;
+    private int speed = 6;
+    private int health = 5, maxHealth = 5;
+    private int knockbackX, knockbackY;
+    private int width = 40;
+    private int height = 40;
 
-    ArrayList<Bullet> bullets = new ArrayList<>();
+    private ArrayList<Bullet> bullets = new ArrayList<>();
 
-    int maxAmmo = 16;
-    int currentAmmo = 16;
-    int magazines = 3;
+    private int maxAmmo = 16;
+    private int currentAmmo = 16;
+    private int magazines = 3;
 
-    int score = 0;
+    private int score = 0;
 
-    long lastWalkSound = 0;
-    long walkDelay = 200;
+    private long lastWalkSound = 0;
+    private long walkDelay = 200;
 
-    boolean reloading = false;
-    boolean readyToShoot = true;
-    long reloadTime = 500;
-    long reloadStartTime = 0;
+    private boolean reloading = false;
+    private boolean readyToShoot = true;
+    private long reloadTime = 500;
+    private long reloadStartTime = 0;
 
 
     public Player(int startX, int startY) {
@@ -41,7 +41,7 @@ public class Player {
         updateBullets(windowWidth, windowHeight, enemies);
     }
 
-    public void move(boolean up, boolean down, boolean left, boolean right) {
+    private void move(boolean up, boolean down, boolean left, boolean right) {
 
         boolean moving = up || down || left || right;
 
@@ -157,7 +157,7 @@ public class Player {
     }
 
     // starts reload process and records when it began
-    public void reload() {
+    private void reload() {
         if (reloading) {
             return;
         }
@@ -170,7 +170,7 @@ public class Player {
     }
 
     // completes the reload process once time has passed
-    public void updateReload() {
+    private void updateReload() {
         if (reloading) {
             if (System.currentTimeMillis() - reloadStartTime >= reloadTime) {
                 currentAmmo = maxAmmo;
@@ -181,20 +181,20 @@ public class Player {
         }
     }
 
-    public void updateBullets (int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
+    private void updateBullets (int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
         for (int i = bullets.size() - 1; i >= 0; i--) {
             
             Bullet b = bullets.get(i);
             b.update();
 
             // if bullet goes off screen, remove it
-            if (b.x < 0 || b.x > windowWidth || b.y < 0 || b.y > windowHeight) {
+            if (b.getX() < 0 || b.getX() > windowWidth || b.getY()< 0 || b.getY() > windowHeight) {
                 bullets.remove(i);
                 continue;
             }
             // if bullet touches enemy, remove it
             for (Enemy e : enemies) {
-                if (e.alive && b.getBounds().intersects(e.getBounds())) {
+                if (e.isAlive() && b.getBounds().intersects(e.getBounds())) {
                     System.out.println("Bullet touched enemy");
                     bullets.remove(i);
 
@@ -214,14 +214,26 @@ public class Player {
     }
 
     public void collectItem (Item item) {
-        if (item.type == Item.ItemType.MEDKIT) {
+        if (item.getType() == Item.ItemType.MEDKIT) {
             // heal 1 point, but don't go over maxHealth
             health = Math.min(health + 1, maxHealth);
         }
-        if (item.type == Item.ItemType.MAGAZINE) {
+        if (item.getType() == Item.ItemType.MAGAZINE) {
             // heal 1 point, but don't go over maxHealth
             magazines++;
         }
         Sound.play("audio/Random60.wav");
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

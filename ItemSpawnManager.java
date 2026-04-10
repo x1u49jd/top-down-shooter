@@ -2,11 +2,11 @@ import java.util.Random;
 
 public class ItemSpawnManager {
     
-    int maxItemsOnScreen = 4;
-    long itemsSpawnDelay = 1000;
-    long lastItemSpawnTime = 0;
+    private int maxItemsOnScreen = 4;
+    private long itemsSpawnDelay = 1000;
+    private long lastItemSpawnTime = 0;
 
-    public void spawnItem(ItemManager itemManager, int panelWidth, int panelHeight) {
+    private void spawnItem(ItemManager itemManager, int panelWidth, int panelHeight) {
         // counts how many of each item there already are on the screen
         int medkitsOnScreen = itemManager.countType(Item.ItemType.MEDKIT);
         int magazinesOnScreen = itemManager.countType(Item.ItemType.MAGAZINE);
@@ -44,5 +44,9 @@ public class ItemSpawnManager {
             spawnItem(itemManager, width, height);
             lastItemSpawnTime = System.currentTimeMillis();
         }
+    }
+
+    public void resetItemSpawnTime() {
+        lastItemSpawnTime = System.currentTimeMillis();
     }
 }

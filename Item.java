@@ -9,10 +9,10 @@ public class Item {
         MAGAZINE
     }
 
-    int x,y;
-    int width = 20;
-    int height = 20;
-    ItemType type;
+    private int x,y;
+    private int width = 20;
+    private int height = 20;
+    private ItemType type;
 
     public Item(int startX, int startY, ItemType type) {
         this.x = startX;
@@ -33,5 +33,9 @@ public class Item {
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
+    }
+
+    public ItemType getType() {
+        return type;
     }
 }

@@ -5,11 +5,11 @@ import java.awt.Graphics;
 
 public class GamePanel extends JPanel {
     
-    Player player;
-    ItemManager itemManager;
-    EnemyManager enemyManager;
-    WaveManager waveManager;
-    Game.GameState gameState;
+    private Player player;
+    private ItemManager itemManager;
+    private EnemyManager enemyManager;
+    private WaveManager waveManager;
+    private Game.GameState gameState;
 
 
     public GamePanel(Player player, ItemManager itemManager, EnemyManager enemyManager, WaveManager waveManager) {
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel {
             e.draw(g);
         }
         player.draw(g);
-        g.drawString("Wave: " + waveManager.wave, getWidth() - 120, 40);
+        g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
 
         if (gameState == Game.GameState.GAME_OVER) {
 

@@ -7,24 +7,24 @@ public class Game {
         GAME_OVER
     }
 
-    GameState gameState = GameState.PLAYING;
+    private GameState gameState = GameState.PLAYING;
 
-    JFrame window;
+    private JFrame window;
 
-    int initialWindowWidth = 1440, initialWindowHeight = 900;
+    private int initialWindowWidth = 1440, initialWindowHeight = 900;
 
-    volatile boolean restartRequested = false;
+    private volatile boolean restartRequested = false;
 
-    Player player;
+    private Player player;
 
-    WaveManager waveManager;
-    ItemManager itemManager;
-    ItemSpawnManager itemSpawnManager;
-    EnemyManager enemyManager;
-    GamePanel panel;
-    InputHandler input;
+    private WaveManager waveManager;
+    private ItemManager itemManager;
+    private ItemSpawnManager itemSpawnManager;
+    private EnemyManager enemyManager;
+    private GamePanel panel;
+    private InputHandler input;
 
-    public void restartGame() {
+    private void restartGame() {
         gameState = GameState.PLAYING;
         waveManager.resetWave();
 
@@ -32,27 +32,24 @@ public class Game {
         panel.setPlayer(player);
         input.setPlayer(player);
         itemManager.clearItems();
-        itemSpawnManager.lastItemSpawnTime = System.currentTimeMillis();
+        itemSpawnManager.resetItemSpawnTime();
 
         waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
 
-        input.upPressed = false;
-        input.downPressed = false;
-        input.leftPressed = false;
-        input.rightPressed = false;
+        input.reset();
 
         panel.repaint();
 
         Sound.play("audio/Blip12.wav");
     }
 
-    public void checkGameOver() {
-        if (player.health <= 0) {
+    private void checkGameOver() {
+        if (player.getHealth() <= 0) {
             gameState = GameState.GAME_OVER;
         }
     }
 
-    public void gameLoop() {
+    private void gameLoop() {
         while (true) {
             if (restartRequested) {
                 restartRequested = false;
@@ -61,7 +58,7 @@ public class Game {
 
             if (gameState == GameState.PLAYING) {
                 // update player's position based on keys pressed, bullets, reload
-                player.update(input.upPressed, input.downPressed, input.leftPressed, input.rightPressed, panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
+                player.update(input.isUpPressed(), input.isDownPressed(), input.isLeftPressed(), input.isRightPressed(), panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
                 enemyManager.update(player);
                 itemManager.checkItemPickup(player);
                 checkGameOver();
@@ -83,13 +80,13 @@ public class Game {
                     e.printStackTrace();
                 }
             }
-            if (gameState == Game.GameState.GAME_OVER && input.restartRequested){
+            if (gameState == Game.GameState.GAME_OVER && input.isRestartRequested()){
                 restartRequested = true;
             }
         }
     }
 
-    public void createWindow() {
+    private void createWindow() {
         window = new JFrame();
         window.setSize(initialWindowWidth, initialWindowHeight);
         window.setTitle("Top Down Shooter");
@@ -101,11 +98,11 @@ public class Game {
         window.setLocationRelativeTo(null);
     }
 
-    public void createGameObjects() {
+    private void createGameObjects() {
         player = new Player(400,400);
     }
 
-    public void setupInput() {
+    private void setupInput() {
         panel.addMouseListener(input);
         window.addKeyListener(input);
     }

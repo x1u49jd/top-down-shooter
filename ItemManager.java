@@ -27,7 +27,7 @@ public class ItemManager {
         int count = 0;
 
         for (Item i : items) {
-            if (i.type == type) {
+            if (i.getType() == type) {
                 count++;
             }
         }
