@@ -29,16 +29,26 @@ public class GamePanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g){
-        super.paintComponent(g); // clears the panel
-        for (Item i : itemManager.getItems()) {
-            i.draw(g);
+        if (gameState == Game.GameState.MENU) {
+            String startText = "Press ENTER to start"; 
+            Font starFont = new Font("Arial", Font.BOLD, 80);
+            g.setFont(starFont);
+            int startWidth = g.getFontMetrics().stringWidth(startText);
+            int startx = (getWidth() - startWidth) / 2;
+            int starty = getHeight() / 2 ;
+            g.drawString(startText, startx, starty);
         }
-        for (Enemy e : enemyManager.getEnemies()) {
-            e.draw(g);
+        if (gameState == Game.GameState.PLAYING) {
+            super.paintComponent(g); // clears the panel
+            for (Item i : itemManager.getItems()) {
+                i.draw(g);
+            }
+            for (Enemy e : enemyManager.getEnemies()) {
+                e.draw(g);
+            }
+            player.draw(g);
+            g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
         }
-        player.draw(g);
-        g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
-
         if (gameState == Game.GameState.GAME_OVER) {
 
             // dark transparent overlay

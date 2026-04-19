@@ -3,16 +3,18 @@ import javax.swing.JFrame;
 public class Game {
 
     enum GameState {
+        MENU,
         PLAYING,
         GAME_OVER
     }
 
-    private GameState gameState = GameState.PLAYING;
+    private GameState gameState = GameState.MENU;
 
     private JFrame window;
 
     private int initialWindowWidth = 1440, initialWindowHeight = 900;
 
+    private volatile boolean startRequested = false;
     private volatile boolean restartRequested = false;
 
     private Player player;
@@ -51,10 +53,17 @@ public class Game {
 
     private void gameLoop() {
         while (true) {
-            if (restartRequested) {
-                restartRequested = false;
-                restartGame();
+            if (gameState == GameState.MENU) {
+                panel.setGameState(gameState);
+                if (input.isStartRequested()) {
+                    startRequested = true;
+                }
             }
+
+            if (startRequested) {
+                startRequested = false;
+                gameState = GameState.PLAYING;
+            }          
 
             if (gameState == GameState.PLAYING) {
                 // update player's position based on keys pressed, bullets, reload
@@ -82,6 +91,11 @@ public class Game {
             }
             if (gameState == Game.GameState.GAME_OVER && input.isRestartRequested()){
                 restartRequested = true;
+            }
+            
+            if (restartRequested) {
+                restartRequested = false;
+                restartGame();
             }
         }
     }

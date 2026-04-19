@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class InputHandler implements KeyListener, MouseListener {
-    private boolean upPressed, downPressed, leftPressed, rightPressed, restartRequested = false;
+    private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, restartRequested = false;
 
     private Player player;
     
@@ -23,6 +23,7 @@ public class InputHandler implements KeyListener, MouseListener {
         if (key == KeyEvent.VK_S) {downPressed = true;};
         if (key == KeyEvent.VK_A) {leftPressed = true;};
         if (key == KeyEvent.VK_D) {rightPressed = true;};
+        if (key == KeyEvent.VK_ENTER) {startRequested = true;}
         if (key == KeyEvent.VK_R) {restartRequested = true;}
     }
 
@@ -33,6 +34,7 @@ public class InputHandler implements KeyListener, MouseListener {
         if (key == KeyEvent.VK_S) {downPressed = false;};
         if (key == KeyEvent.VK_A) {leftPressed = false;};
         if (key == KeyEvent.VK_D) {rightPressed = false;};
+        if (key == KeyEvent.VK_ENTER) {startRequested = false;}
         if (key == KeyEvent.VK_R) {restartRequested = false;}
     }
 
@@ -77,6 +79,10 @@ public class InputHandler implements KeyListener, MouseListener {
 
     public boolean isRightPressed() {
         return rightPressed;
+    }
+
+    public boolean isStartRequested() {
+        return startRequested;
     }
 
     public boolean isRestartRequested() {
