@@ -14,8 +14,8 @@ public class Game {
 
     private int initialWindowWidth = 1440, initialWindowHeight = 900;
 
-    private volatile boolean startRequested = false;
-    private volatile boolean restartRequested = false;
+    private boolean startRequested = false;
+    private boolean restartRequested = false;
 
     private Player player;
 
@@ -92,7 +92,7 @@ public class Game {
             if (gameState == Game.GameState.GAME_OVER && input.isRestartRequested()){
                 restartRequested = true;
             }
-            
+
             if (restartRequested) {
                 restartRequested = false;
                 restartGame();

@@ -27,63 +27,76 @@ public class GamePanel extends JPanel {
         this.player = player;
     }
 
+    public void drawMenu(Graphics g) {
+        String startText = "Press ENTER to start"; 
+        Font starFont = new Font("Arial", Font.BOLD, 80);
+        g.setFont(starFont);
+        int startWidth = g.getFontMetrics().stringWidth(startText);
+        int startx = (getWidth() - startWidth) / 2;
+        int starty = getHeight() / 2 ;
+        g.drawString(startText, startx, starty);
+    }
+
+    public void drawPlaying(Graphics g) {
+        super.paintComponent(g); // clears the panel
+        for (Item i : itemManager.getItems()) {
+            i.draw(g);
+        }
+        for (Enemy e : enemyManager.getEnemies()) {
+            e.draw(g);
+        }
+        player.draw(g);
+        g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
+    }
+
+    public void drawGameOver(Graphics g) {
+        // dark transparent overlay
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        String gameOverText = "Game Over";
+        String restartText = "Press R to Restart";
+
+        Font gameOverFont = new Font("Arial", Font.BOLD, 80);
+        Font restartFont = new Font("Arial", Font.BOLD, 35);
+
+        // GAME OVER
+        g.setColor(Color.WHITE);
+        g.setFont(gameOverFont);
+
+        // get width of text
+        int gameOverWidth = g.getFontMetrics().stringWidth(gameOverText);
+
+        // calculate center position for text
+        int gameOverx = (getWidth() - gameOverWidth) / 2;
+        int gameOvery = getHeight() / 2;
+
+        g.drawString(gameOverText, gameOverx, gameOvery);
+
+        // RESTART
+
+        g.setFont(restartFont);
+        int restartWidth = g.getFontMetrics().stringWidth(restartText);
+
+        // calculate center position for text
+        int restartx = (getWidth() - restartWidth) / 2;
+        int restarty = getHeight() / 2 + 60;
+
+        g.drawString(restartText, restartx, restarty);
+    }
+
     @Override
     protected void paintComponent(Graphics g){
-        if (gameState == Game.GameState.MENU) {
-            String startText = "Press ENTER to start"; 
-            Font starFont = new Font("Arial", Font.BOLD, 80);
-            g.setFont(starFont);
-            int startWidth = g.getFontMetrics().stringWidth(startText);
-            int startx = (getWidth() - startWidth) / 2;
-            int starty = getHeight() / 2 ;
-            g.drawString(startText, startx, starty);
-        }
-        if (gameState == Game.GameState.PLAYING) {
-            super.paintComponent(g); // clears the panel
-            for (Item i : itemManager.getItems()) {
-                i.draw(g);
-            }
-            for (Enemy e : enemyManager.getEnemies()) {
-                e.draw(g);
-            }
-            player.draw(g);
-            g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
-        }
-        if (gameState == Game.GameState.GAME_OVER) {
-
-            // dark transparent overlay
-            g.setColor(new Color(0, 0, 0, 180));
-            g.fillRect(0, 0, getWidth(), getHeight());
-
-            String gameOverText = "Game Over";
-            String restartText = "Press R to Restart";
-
-            Font gameOverFont = new Font("Arial", Font.BOLD, 80);
-            Font restartFont = new Font("Arial", Font.BOLD, 35);
-
-            // GAME OVER
-            g.setColor(Color.WHITE);
-            g.setFont(gameOverFont);
-
-            // get width of text
-            int gameOverWidth = g.getFontMetrics().stringWidth(gameOverText);
-
-            // calculate center position for text
-            int gameOverx = (getWidth() - gameOverWidth) / 2;
-            int gameOvery = getHeight() / 2;
-
-            g.drawString(gameOverText, gameOverx, gameOvery);
-
-            // RESTART
-
-            g.setFont(restartFont);
-            int restartWidth = g.getFontMetrics().stringWidth(restartText);
-
-            // calculate center position for text
-            int restartx = (getWidth() - restartWidth) / 2;
-            int restarty = getHeight() / 2 + 60;
-
-            g.drawString(restartText, restartx, restarty);
+        switch (gameState) {
+            case MENU:
+                drawMenu(g);
+                break;
+            case PLAYING:
+                drawPlaying(g);
+                break;
+            case GAME_OVER:
+                drawGameOver(g);
+                break;
         }
     }
 }
