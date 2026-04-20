@@ -26,6 +26,12 @@ public class Game {
     private GamePanel panel;
     private InputHandler input;
 
+    private void startGame() {
+        gameState = GameState.PLAYING;
+        startRequested = false;
+        Sound.play("audio/Blip.wav");
+    }
+
     private void restartGame() {
         gameState = GameState.PLAYING;
         waveManager.resetWave();
@@ -61,8 +67,7 @@ public class Game {
             }
 
             if (startRequested) {
-                startRequested = false;
-                gameState = GameState.PLAYING;
+                startGame();
             }          
 
             if (gameState == GameState.PLAYING) {
