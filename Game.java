@@ -30,21 +30,25 @@ public class Game {
     private void startGame() {
         gameState = GameState.PLAYING;
         startRequested = false;
+        input.clearAllInput();
         Sound.play("audio/Blip.wav");
     }
 
     private void pauseGame() {
         gameState = GameState.PAUSE;
+        input.clearAllInput();
         panel.setGameState(gameState);
         panel.repaint();
     }
 
     private void unpauseGame() {
         gameState = GameState.PLAYING;
+        input.clearAllInput();
     }
 
     private void restartGame() {
         gameState = GameState.PLAYING;
+        input.clearAllInput();
         waveManager.resetWave();
 
         player = new Player(400, 400);
@@ -65,6 +69,7 @@ public class Game {
     private void checkGameOver() {
         if (player.getHealth() <= 0) {
             gameState = GameState.GAME_OVER;
+            input.clearAllInput();
         }
     }
 
@@ -82,6 +87,11 @@ public class Game {
             }          
 
             if (gameState == GameState.PLAYING) {
+
+                if (input.isMousePressed()) {
+                    player.shoot(input.getMouseX(), input.getMouseY());
+                    input.resetMouse();
+                }
 
                 // update player's position based on keys pressed, bullets, reload
                 player.update(input.isUpPressed(), input.isDownPressed(), input.isLeftPressed(), input.isRightPressed(), panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());

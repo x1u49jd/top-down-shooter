@@ -7,6 +7,8 @@ public class InputHandler implements KeyListener, MouseListener {
     private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, paused, restartRequested = false;
 
     private Player player;
+    private boolean mousePressed;
+    private int mouseX, mouseY;
     
     public InputHandler(Player player) {
         this.player = player;
@@ -45,7 +47,29 @@ public class InputHandler implements KeyListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        player.shoot(e.getX(), e.getY());
+        mousePressed = true;
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    public boolean isMousePressed() {
+        return mousePressed;
+    }
+
+    public int getMouseX() {
+        return mouseX;
+    }
+
+    public int getMouseY() {
+        return mouseY;
+    }
+
+    public void resetMouse() {
+        mousePressed = false;
+    }
+
+    public void clearAllInput() {
+        mousePressed = false;
     }
 
     @Override
