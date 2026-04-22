@@ -229,6 +229,10 @@ public class Player {
         return health;
     }
 
+    public int getScore() {
+        return score;
+    }
+
     public int getX() {
         return x;
     }

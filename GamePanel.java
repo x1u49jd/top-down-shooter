@@ -91,9 +91,11 @@ public class GamePanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
 
         String gameOverText = "Game Over";
+        String scoreText = "Score: " + player.getScore();
         String restartText = "Press R to Restart";
 
         Font gameOverFont = new Font("Arial", Font.BOLD, 80);
+        Font scoreFont = new Font("Arial", Font.BOLD, 35);
         Font restartFont = new Font("Arial", Font.BOLD, 35);
 
         // GAME OVER
@@ -109,6 +111,18 @@ public class GamePanel extends JPanel {
 
         g.drawString(gameOverText, gameOverx, gameOvery);
 
+        // SCORE
+
+        g.setFont(scoreFont);
+        int scoreWidth = g.getFontMetrics().stringWidth(scoreText);
+
+        // calculate center position for text
+        int scorex = (getWidth() - scoreWidth) / 2;
+        int scorey = getHeight() / 2 + 60;
+
+        g.drawString(scoreText, scorex, scorey);
+
+
         // RESTART
 
         g.setFont(restartFont);
@@ -116,7 +130,7 @@ public class GamePanel extends JPanel {
 
         // calculate center position for text
         int restartx = (getWidth() - restartWidth) / 2;
-        int restarty = getHeight() / 2 + 60;
+        int restarty = getHeight() / 2 + 160;
 
         g.drawString(restartText, restartx, restarty);
     }
