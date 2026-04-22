@@ -6,17 +6,8 @@ import java.awt.event.MouseListener;
 public class InputHandler implements KeyListener, MouseListener {
     private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, paused, restartRequested = false;
 
-    private Player player;
     private boolean mousePressed;
     private int mouseX, mouseY;
-    
-    public InputHandler(Player player) {
-        this.player = player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {

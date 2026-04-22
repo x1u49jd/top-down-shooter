@@ -53,7 +53,6 @@ public class Game {
 
         player = new Player(400, 400);
         panel.setPlayer(player);
-        input.setPlayer(player);
         itemManager.clearItems();
         itemSpawnManager.resetItemSpawnTime();
 
@@ -162,7 +161,7 @@ public class Game {
         waveManager = new WaveManager();
         itemSpawnManager = new ItemSpawnManager();
         panel = new GamePanel(player, itemManager, enemyManager, waveManager);
-        input = new InputHandler(player);
+        input = new InputHandler();
         setupInput();
         window.add(panel);
         window.setVisible(true);
