@@ -49,6 +49,42 @@ public class GamePanel extends JPanel {
         g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
     }
 
+    public void drawPause(Graphics g) {
+        // dark transparent overlay
+        g.setColor(new Color(0, 0, 0, 180));
+        g.fillRect(0, 0, getWidth(), getHeight());
+
+        String pauseText = "Pause";
+        String unpauseText = "Press P to unpause";
+
+        Font pauseFont = new Font("Arial", Font.BOLD, 80);
+        Font unpauseFont = new Font("Arial", Font.BOLD, 35);
+
+        // PAUSE
+        g.setColor(Color.WHITE);
+        g.setFont(pauseFont);
+
+        // get width of text
+        int pauseWidth = g.getFontMetrics().stringWidth(pauseText);
+
+        // calculate center position for text
+        int pausex = (getWidth() - pauseWidth) / 2;
+        int pausey = getHeight() / 2;
+
+        g.drawString(pauseText, pausex, pausey);
+
+        // UNPAUSE
+
+        g.setFont(unpauseFont);
+        int unpauseWidth = g.getFontMetrics().stringWidth(unpauseText);
+
+        // calculate center position for text
+        int unpausex = (getWidth() - unpauseWidth) / 2;
+        int unpausey = getHeight() / 2 + 60;
+
+        g.drawString(unpauseText, unpausex, unpausey);
+    }
+
     public void drawGameOver(Graphics g) {
         // dark transparent overlay
         g.setColor(new Color(0, 0, 0, 180));
@@ -93,6 +129,9 @@ public class GamePanel extends JPanel {
                 break;
             case PLAYING:
                 drawPlaying(g);
+                break;
+            case PAUSE:
+                drawPause(g);
                 break;
             case GAME_OVER:
                 drawGameOver(g);

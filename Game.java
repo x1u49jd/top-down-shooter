@@ -5,6 +5,7 @@ public class Game {
     enum GameState {
         MENU,
         PLAYING,
+        PAUSE,
         GAME_OVER
     }
 
@@ -30,6 +31,16 @@ public class Game {
         gameState = GameState.PLAYING;
         startRequested = false;
         Sound.play("audio/Blip.wav");
+    }
+
+    private void pauseGame() {
+        gameState = GameState.PAUSE;
+        panel.setGameState(gameState);
+        panel.repaint();
+    }
+
+    private void unpauseGame() {
+        gameState = GameState.PLAYING;
     }
 
     private void restartGame() {
@@ -71,6 +82,7 @@ public class Game {
             }          
 
             if (gameState == GameState.PLAYING) {
+
                 // update player's position based on keys pressed, bullets, reload
                 player.update(input.isUpPressed(), input.isDownPressed(), input.isLeftPressed(), input.isRightPressed(), panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
                 enemyManager.update(player);
@@ -85,15 +97,13 @@ public class Game {
 
                 panel.setGameState(gameState);
                 panel.repaint(); // redraw after moving
-
-                // wait 16ms (60fps)
-                try {
-                    Thread.sleep(16);
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
+            if (gameState == Game.GameState.PLAYING && input.isPaused()) {
+                    pauseGame();
+                }
+            if (gameState == Game.GameState.PAUSE && !input.isPaused()) {
+                    unpauseGame();
+                }
             if (gameState == Game.GameState.GAME_OVER && input.isRestartRequested()){
                 restartRequested = true;
             }
@@ -101,6 +111,14 @@ public class Game {
             if (restartRequested) {
                 restartRequested = false;
                 restartGame();
+            }
+
+            // wait 16ms (60fps)
+            try {
+                Thread.sleep(16);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
