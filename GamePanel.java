@@ -28,12 +28,20 @@ public class GamePanel extends JPanel {
     }
 
     public void drawMenu(Graphics g) {
+        String titleText = "Top Down Shooter"; 
+        Font titleFont = new Font("Arial", Font.BOLD, 80);
+        g.setFont(titleFont);
+        int titleWidth = g.getFontMetrics().stringWidth(titleText);
+        int titlex = (getWidth() - titleWidth) / 2;
+        int titley = getHeight() / 2 ;
+        g.drawString(titleText, titlex, titley);
+
         String startText = "Press ENTER to start"; 
-        Font starFont = new Font("Arial", Font.BOLD, 80);
+        Font starFont = new Font("Arial", Font.BOLD, 35);
         g.setFont(starFont);
         int startWidth = g.getFontMetrics().stringWidth(startText);
         int startx = (getWidth() - startWidth) / 2;
-        int starty = getHeight() / 2 ;
+        int starty = getHeight() / 2 + 60;
         g.drawString(startText, startx, starty);
     }
 
