@@ -60,6 +60,9 @@ public class Game {
 
         input.reset();
 
+        // keep panel state in sync before repaint so GAME_OVER UI is not drawn with a reset score
+        panel.setGameState(gameState);
+
         panel.repaint();
 
         Sound.play("audio/Blip12.wav");
