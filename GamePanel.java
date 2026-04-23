@@ -55,7 +55,7 @@ public class GamePanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
 
         String pauseText = "Pause";
-        String unpauseText = "Press P to unpause";
+        String unpauseText = "Press P to resume";
 
         Font pauseFont = new Font("Arial", Font.BOLD, 80);
         Font unpauseFont = new Font("Arial", Font.BOLD, 35);
