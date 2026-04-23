@@ -28,6 +28,8 @@ public class GamePanel extends JPanel {
     }
 
     public void drawMenu(Graphics g) {
+        super.paintComponent(g); // clears the panel
+
         String titleText = "Top Down Shooter"; 
         Font titleFont = new Font("Arial", Font.BOLD, 80);
         g.setFont(titleFont);
@@ -64,9 +66,11 @@ public class GamePanel extends JPanel {
 
         String pauseText = "Pause";
         String unpauseText = "Press P to resume";
+        String backMenuText = "Press ESC to main menu";
 
         Font pauseFont = new Font("Arial", Font.BOLD, 80);
         Font unpauseFont = new Font("Arial", Font.BOLD, 35);
+        Font backMenuFont = new Font("Arial", Font.BOLD, 35);
 
         // PAUSE
         g.setColor(Color.WHITE);
@@ -91,6 +95,17 @@ public class GamePanel extends JPanel {
         int unpausey = getHeight() / 2 + 60;
 
         g.drawString(unpauseText, unpausex, unpausey);
+
+        // MAIN MENU
+
+        g.setFont(backMenuFont);
+        int backMenuWidth = g.getFontMetrics().stringWidth(backMenuText);
+
+        // calculate center position for text
+        int backMenux = (getWidth() - backMenuWidth) / 2;
+        int backMenuy = getHeight() / 2 + 120;
+
+        g.drawString(backMenuText, backMenux, backMenuy);
     }
 
     public void drawGameOver(Graphics g) {
@@ -101,10 +116,12 @@ public class GamePanel extends JPanel {
         String gameOverText = "Game Over";
         String scoreText = "Score: " + player.getScore();
         String restartText = "Press R to Restart";
+        String backMenuText = "Press ESC to Main Menu";
 
         Font gameOverFont = new Font("Arial", Font.BOLD, 80);
         Font scoreFont = new Font("Arial", Font.BOLD, 35);
         Font restartFont = new Font("Arial", Font.BOLD, 35);
+        Font backMenuFont = new Font("Arial", Font.BOLD, 35);
 
         // GAME OVER
         g.setColor(Color.WHITE);
@@ -141,10 +158,21 @@ public class GamePanel extends JPanel {
         int restarty = getHeight() / 2 + 160;
 
         g.drawString(restartText, restartx, restarty);
+
+        // MAIN MENU
+
+        g.setFont(backMenuFont);
+        int backMenuWidth = g.getFontMetrics().stringWidth(backMenuText);
+
+        // calculate center position for text
+        int backMenux = (getWidth() - backMenuWidth) / 2;
+        int backMenuy = getHeight() / 2 + 220;
+
+        g.drawString(backMenuText, backMenux, backMenuy);
     }
 
     @Override
-    protected void paintComponent(Graphics g){
+    protected void paintComponent(Graphics g) {
         switch (gameState) {
             case MENU:
                 drawMenu(g);

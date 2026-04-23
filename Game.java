@@ -15,9 +15,6 @@ public class Game {
 
     private int initialWindowWidth = 1440, initialWindowHeight = 900;
 
-    private boolean startRequested = false;
-    private boolean restartRequested = false;
-
     private Player player;
 
     private WaveManager waveManager;
@@ -27,10 +24,10 @@ public class Game {
     private GamePanel panel;
     private InputHandler input;
 
-    private void startGame() {
-        gameState = GameState.PLAYING;
-        startRequested = false;
-        input.clearAllInput();
+    private void backMenu() {
+        gameState = GameState.MENU;
+        panel.setGameState(gameState);
+        panel.repaint();
         Sound.play("audio/Blip.wav");
     }
 
@@ -80,13 +77,9 @@ public class Game {
             if (gameState == GameState.MENU) {
                 panel.setGameState(gameState);
                 if (input.isStartRequested()) {
-                    startRequested = true;
+                    restartGame();
                 }
-            }
-
-            if (startRequested) {
-                startGame();
-            }          
+            }   
 
             if (gameState == GameState.PLAYING) {
 
@@ -113,16 +106,21 @@ public class Game {
             if (gameState == Game.GameState.PLAYING && input.isPaused()) {
                     pauseGame();
                 }
-            if (gameState == Game.GameState.PAUSE && !input.isPaused()) {
+            if (gameState == Game.GameState.PAUSE) {
+                if (!input.isPaused()){
                     unpauseGame();
                 }
-            if (gameState == Game.GameState.GAME_OVER && input.isRestartRequested()){
-                restartRequested = true;
+                if (input.isEscapeRequested()){
+                    backMenu();
+                }
             }
-
-            if (restartRequested) {
-                restartRequested = false;
-                restartGame();
+            if (gameState == Game.GameState.GAME_OVER){
+                if (input.isRestartRequested()) {
+                    restartGame();
+                }
+                if (input.isEscapeRequested()) {
+                    backMenu();
+                }
             }
 
             // wait 16ms (60fps)
