@@ -82,6 +82,7 @@ public class InputHandler implements KeyListener, MouseListener {
         downPressed = false;
         leftPressed = false;
         rightPressed = false;
+        paused = false;
     }
 
     public boolean isUpPressed() {
