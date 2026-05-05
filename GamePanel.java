@@ -34,17 +34,17 @@ public class GamePanel extends JPanel {
         Font titleFont = new Font("Arial", Font.BOLD, 80);
         g.setFont(titleFont);
         int titleWidth = g.getFontMetrics().stringWidth(titleText);
-        int titlex = (getWidth() - titleWidth) / 2;
-        int titley = getHeight() / 2 ;
-        g.drawString(titleText, titlex, titley);
+        int titleX = (getWidth() - titleWidth) / 2;
+        int titleY = getHeight() / 2 ;
+        g.drawString(titleText, titleX, titleY);
 
         String startText = "Press ENTER to start"; 
         Font starFont = new Font("Arial", Font.BOLD, 35);
         g.setFont(starFont);
         int startWidth = g.getFontMetrics().stringWidth(startText);
-        int startx = (getWidth() - startWidth) / 2;
-        int starty = getHeight() / 2 + 60;
-        g.drawString(startText, startx, starty);
+        int startX = (getWidth() - startWidth) / 2;
+        int startY = getHeight() / 2 + 60;
+        g.drawString(startText, startX, startY);
     }
 
     public void drawPlaying(Graphics g) {
@@ -80,10 +80,10 @@ public class GamePanel extends JPanel {
         int pauseWidth = g.getFontMetrics().stringWidth(pauseText);
 
         // calculate center position for text
-        int pausex = (getWidth() - pauseWidth) / 2;
-        int pausey = getHeight() / 2;
+        int pauseX = (getWidth() - pauseWidth) / 2;
+        int pauseY = getHeight() / 2;
 
-        g.drawString(pauseText, pausex, pausey);
+        g.drawString(pauseText, pauseX, pauseY);
 
         // UNPAUSE
 
@@ -91,10 +91,10 @@ public class GamePanel extends JPanel {
         int unpauseWidth = g.getFontMetrics().stringWidth(unpauseText);
 
         // calculate center position for text
-        int unpausex = (getWidth() - unpauseWidth) / 2;
-        int unpausey = getHeight() / 2 + 60;
+        int unpauseX = (getWidth() - unpauseWidth) / 2;
+        int unpauseY = getHeight() / 2 + 60;
 
-        g.drawString(unpauseText, unpausex, unpausey);
+        g.drawString(unpauseText, unpauseX, unpauseY);
 
         // MAIN MENU
 
@@ -102,10 +102,10 @@ public class GamePanel extends JPanel {
         int backMenuWidth = g.getFontMetrics().stringWidth(backMenuText);
 
         // calculate center position for text
-        int backMenux = (getWidth() - backMenuWidth) / 2;
-        int backMenuy = getHeight() / 2 + 120;
+        int backMenuX = (getWidth() - backMenuWidth) / 2;
+        int backMenuY = getHeight() / 2 + 120;
 
-        g.drawString(backMenuText, backMenux, backMenuy);
+        g.drawString(backMenuText, backMenuX, backMenuY);
     }
 
     public void drawGameOver(Graphics g) {
@@ -131,10 +131,10 @@ public class GamePanel extends JPanel {
         int gameOverWidth = g.getFontMetrics().stringWidth(gameOverText);
 
         // calculate center position for text
-        int gameOverx = (getWidth() - gameOverWidth) / 2;
-        int gameOvery = getHeight() / 2;
+        int gameOverX = (getWidth() - gameOverWidth) / 2;
+        int gameOverY = getHeight() / 2;
 
-        g.drawString(gameOverText, gameOverx, gameOvery);
+        g.drawString(gameOverText, gameOverX, gameOverY);
 
         // SCORE
 
@@ -142,10 +142,10 @@ public class GamePanel extends JPanel {
         int scoreWidth = g.getFontMetrics().stringWidth(scoreText);
 
         // calculate center position for text
-        int scorex = (getWidth() - scoreWidth) / 2;
-        int scorey = getHeight() / 2 + 60;
+        int scoreX = (getWidth() - scoreWidth) / 2;
+        int scoreY = getHeight() / 2 + 60;
 
-        g.drawString(scoreText, scorex, scorey);
+        g.drawString(scoreText, scoreX, scoreY);
 
 
         // RESTART
@@ -154,10 +154,10 @@ public class GamePanel extends JPanel {
         int restartWidth = g.getFontMetrics().stringWidth(restartText);
 
         // calculate center position for text
-        int restartx = (getWidth() - restartWidth) / 2;
-        int restarty = getHeight() / 2 + 160;
+        int restartX = (getWidth() - restartWidth) / 2;
+        int restartY = getHeight() / 2 + 160;
 
-        g.drawString(restartText, restartx, restarty);
+        g.drawString(restartText, restartX, restartY);
 
         // MAIN MENU
 
@@ -165,10 +165,10 @@ public class GamePanel extends JPanel {
         int backMenuWidth = g.getFontMetrics().stringWidth(backMenuText);
 
         // calculate center position for text
-        int backMenux = (getWidth() - backMenuWidth) / 2;
-        int backMenuy = getHeight() / 2 + 220;
+        int backMenuX = (getWidth() - backMenuWidth) / 2;
+        int backMenuY = getHeight() / 2 + 220;
 
-        g.drawString(backMenuText, backMenux, backMenuy);
+        g.drawString(backMenuText, backMenuX, backMenuY);
     }
 
     @Override
