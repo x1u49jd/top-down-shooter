@@ -3,11 +3,10 @@ import java.awt.Rectangle;
 import java.awt.Color;
 
 public class Bullet {
+    private static final int WIDTH = 8, HEIGHT = 8;
     private double x, y;
     private double velX, velY;
     private double speed = 30;
-    private int width = 8;
-    private int height = 8;
     
     public Bullet(double startX, double startY, double targetX, double targetY) {
         x = startX;
@@ -38,11 +37,11 @@ public class Bullet {
     
     public void draw(Graphics g) {
         g.setColor(Color.BLACK);
-        g.fillOval((int) x,(int) y, width, height);
+        g.fillOval((int) x,(int) y, WIDTH, HEIGHT);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle((int) x, (int) y, width, height);
+        return new Rectangle((int) x, (int) y, WIDTH, HEIGHT);
     }
 
     public double getX() {

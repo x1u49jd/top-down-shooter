@@ -6,12 +6,11 @@ import java.util.ArrayList;
 
 
 public class Player {
+    private static final int WIDTH = 40, HEIGHT = 40;
     private int x,y;
     private int speed = 6;
     private int health = 5, maxHealth = 5;
     private int knockbackX, knockbackY;
-    private int width = 40;
-    private int height = 40;
 
     private ArrayList<Bullet> bullets = new ArrayList<>();
 
@@ -66,7 +65,7 @@ public class Player {
 
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
-        g.fillRect(x, y, width, height);
+        g.fillRect(x, y, WIDTH, HEIGHT);
 
         // ---- UI HEALTH BAR ----
         int barWidth = 40; // same width as player
@@ -140,8 +139,8 @@ public class Player {
         if (readyToShoot && health > 0) {
             if (currentAmmo > 0) {
                 // spawn bullet at player's center
-                double startX = x + (width / 2);
-                double startY = y + (height / 2);
+                double startX = x + (WIDTH / 2);
+                double startY = y + (HEIGHT / 2);
 
                 bullets.add(new Bullet(startX, startY, targetX, targetY));
                 currentAmmo--;
@@ -210,7 +209,7 @@ public class Player {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public void collectItem (Item item) {

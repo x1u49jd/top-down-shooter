@@ -9,11 +9,11 @@ public class Game {
         GAME_OVER
     }
 
+    private static int INITIAL_WINDOW_WIDTH = 1440, INITIAL_WINDOW_HEIGHT = 900;
+    
     private GameState gameState = GameState.MENU;
 
     private JFrame window;
-
-    private int initialWindowWidth = 1440, initialWindowHeight = 900;
 
     private Player player;
 
@@ -135,7 +135,7 @@ public class Game {
 
     private void createWindow() {
         window = new JFrame();
-        window.setSize(initialWindowWidth, initialWindowHeight);
+        window.setSize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT);
         window.setTitle("Top Down Shooter");
 
         // tells Java that when X is clicked, end the program

@@ -8,10 +8,9 @@ public class Item {
         MEDKIT,
         MAGAZINE
     }
-
+    
+    private static final int WIDTH = 20, HEIGHT = 20;
     private int x,y;
-    private int width = 20;
-    private int height = 20;
     private ItemType type;
 
     public Item(int startX, int startY, ItemType type) {
@@ -28,11 +27,11 @@ public class Item {
             g.setColor(Color.DARK_GRAY);
         }
 
-        g.fillRect(x, y, width, height);
+        g.fillRect(x, y, WIDTH, HEIGHT);
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public ItemType getType() {

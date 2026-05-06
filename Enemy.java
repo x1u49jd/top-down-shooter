@@ -4,11 +4,11 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Enemy {
+    private static final int WIDTH = 40, HEIGHT = 40;
     private int x,y;
     private int speed = 2;
     private int health = 3, maxHealth = 3;
     private double knockbackStrength = 10;
-    private int width = 40, height = 40;
     private boolean alive = true;
 
     private double knockbackX, knockbackY;
@@ -61,7 +61,7 @@ public class Enemy {
 
             // set minimum allowed distance 
             // width means enemies won't overlap, adding extra increases spacing
-            int minDistance = width + 15;
+            int minDistance = WIDTH + 15;
 
             // if enemies are too cloase , apply push force
             // distance > 0 prevents division by zero below
@@ -87,7 +87,7 @@ public class Enemy {
         if (alive == false) { return;}
 
         g.setColor(Color.RED);
-        g.fillRect(x, y, width, height);
+        g.fillRect(x, y, WIDTH, HEIGHT);
 
         if (health < maxHealth) {
             // ---- UI HEALTH BAR ----
@@ -140,7 +140,7 @@ public class Enemy {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
     public boolean isAlive(){
