@@ -64,7 +64,6 @@ public class GamePanel extends JPanel {
         g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
 
         if (!waveCountdownText.isEmpty()) {
-            g.setColor(new Color(0, 0, 0, 180));
             g.setFont(new Font("Arial", Font.BOLD, 80));
 
             int countdownWidth = g.getFontMetrics().stringWidth(waveCountdownText);
