@@ -52,6 +52,7 @@ public class Game {
     private void restartGame() {
         gameState = GameState.PLAYING;
         input.clearAllInput();
+        enemyManager.clearEnemies();
         waveManager.resetWave();
 
         waitingForNextWave = false;
@@ -62,7 +63,7 @@ public class Game {
         itemManager.clearItems();
         itemSpawnManager.resetItemSpawnTime();
 
-        waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
+        startNextWaveCountDown();
 
         input.reset();
 
@@ -207,9 +208,6 @@ public class Game {
         setupInput();
         window.add(panel);
         window.setVisible(true);
-
-        // added after panel added so that layout is calculated and ready to use by spawnWave()
-        waveManager.spawnWave(enemyManager, panel.getWidth(), panel.getHeight());
 
         new Thread(this::gameLoop).start();
     }
