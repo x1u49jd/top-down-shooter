@@ -24,8 +24,14 @@ public class Game {
     private GamePanel panel;
     private InputHandler input;
 
+    private boolean waitingForNextWave = false;
+    private long nextWaveCountdownStartTime = 0;
+    private static final long NEXT_WAVE_COUNTDOWN_DURATION = 4000;
+
     private void backMenu() {
         gameState = GameState.MENU;
+        waitingForNextWave = false;
+        panel.setWaveCountdownText("");
         panel.setGameState(gameState);
         panel.repaint();
         Sound.play("audio/Blip.wav");
@@ -48,6 +54,9 @@ public class Game {
         input.clearAllInput();
         waveManager.resetWave();
 
+        waitingForNextWave = false;
+        panel.setWaveCountdownText("");
+
         player = new Player(400, 400);
         panel.setPlayer(player);
         itemManager.clearItems();
@@ -68,7 +77,36 @@ public class Game {
     private void checkGameOver() {
         if (player.getHealth() <= 0) {
             gameState = GameState.GAME_OVER;
+            waitingForNextWave = false;
+            panel.setWaveCountdownText("");
             input.clearAllInput();
+        }
+    }
+
+    private void startNextWaveCountDown() {
+        waitingForNextWave = true;
+        nextWaveCountdownStartTime = System.currentTimeMillis();
+    }
+
+    private void updateNextWaveCountDown() {
+        long elapsed = System.currentTimeMillis() - nextWaveCountdownStartTime;
+
+        if (elapsed < 1000) {
+            panel.setWaveCountdownText("3");
+        }
+        else if (elapsed < 2000) {
+            panel.setWaveCountdownText("2");
+        }
+        else if (elapsed < 3000) {
+            panel.setWaveCountdownText("1");
+        }
+        else if (elapsed < NEXT_WAVE_COUNTDOWN_DURATION) {
+            panel.setWaveCountdownText("START");
+        }
+        else {
+            waitingForNextWave = false;
+            panel.setWaveCountdownText("");
+            waveManager.spawnNextWave(enemyManager, panel.getWidth(), panel.getHeight());
         }
     }
 
@@ -95,9 +133,12 @@ public class Game {
                 checkGameOver();
                 itemSpawnManager.update(itemManager ,panel.getWidth(), panel.getHeight());
 
-                // spawn next wave when all enemies in the current wave are dead
-                if (enemyManager.areAllDead()) {
-                    waveManager.spawnNextWave(enemyManager, panel.getWidth(), panel.getHeight());
+                // start the countdown and spawn enemies
+                if (waitingForNextWave) {
+                    updateNextWaveCountDown();
+                }
+                else if (enemyManager.areAllDead()) {
+                    startNextWaveCountDown();
                 }
 
                 panel.setGameState(gameState);

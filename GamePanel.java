@@ -11,6 +11,7 @@ public class GamePanel extends JPanel {
     private WaveManager waveManager;
     private Game.GameState gameState;
 
+    private String waveCountdownText = "";
 
     public GamePanel(Player player, ItemManager itemManager, EnemyManager enemyManager, WaveManager waveManager) {
         this.player = player;
@@ -25,6 +26,10 @@ public class GamePanel extends JPanel {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public void setWaveCountdownText(String waveCountdownText) {
+        this.waveCountdownText = waveCountdownText;
     }
 
     public void drawMenu(Graphics g) {
@@ -57,6 +62,17 @@ public class GamePanel extends JPanel {
         }
         player.draw(g);
         g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
+
+        if (!waveCountdownText.isEmpty()) {
+            g.setColor(new Color(0, 0, 0, 180));
+            g.setFont(new Font("Arial", Font.BOLD, 80));
+
+            int countdownWidth = g.getFontMetrics().stringWidth(waveCountdownText);
+            int countdownX = (getWidth() - countdownWidth) / 2;
+            int countdownY = getHeight() / 2;
+            
+            g.drawString(waveCountdownText, countdownX, countdownY);
+        }
     }
 
     public void drawPause(Graphics g) {
