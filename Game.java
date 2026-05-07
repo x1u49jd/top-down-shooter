@@ -26,7 +26,9 @@ public class Game {
 
     private boolean waitingForNextWave = false;
     private long nextWaveCountdownStartTime = 0;
+    private static final long PRE_COUNTDOWN_DELAY_DURATION = 2000;
     private static final long NEXT_WAVE_COUNTDOWN_DURATION = 4000;
+    private int lastCountdownStage = -1;
 
     private void backMenu() {
         gameState = GameState.MENU;
@@ -63,8 +65,6 @@ public class Game {
         itemManager.clearItems();
         itemSpawnManager.resetItemSpawnTime();
 
-        startNextWaveCountDown();
-
         input.reset();
 
         // keep panel state in sync before repaint so GAME_OVER UI is not drawn with a reset score
@@ -73,6 +73,7 @@ public class Game {
         panel.repaint();
 
         Sound.play("audio/Blip12.wav");
+        startNextWaveCountDown();
     }
 
     private void checkGameOver() {
@@ -87,27 +88,49 @@ public class Game {
     private void startNextWaveCountDown() {
         waitingForNextWave = true;
         nextWaveCountdownStartTime = System.currentTimeMillis();
+        panel.setWaveCountdownText("");
+        lastCountdownStage = -1;
     }
 
     private void updateNextWaveCountDown() {
         long elapsed = System.currentTimeMillis() - nextWaveCountdownStartTime;
+        long countdownElapsed = elapsed - PRE_COUNTDOWN_DELAY_DURATION;
+        int currentCountdownStage = -1;
 
-        if (elapsed < 1000) {
+        if (countdownElapsed < 0) {
+            panel.setWaveCountdownText("");
+        }
+        else if (countdownElapsed < 1000) {
             panel.setWaveCountdownText("3");
+            currentCountdownStage = 0;
         }
-        else if (elapsed < 2000) {
+        else if (countdownElapsed < 2000) {
             panel.setWaveCountdownText("2");
+            currentCountdownStage = 1;
         }
-        else if (elapsed < 3000) {
+        else if (countdownElapsed < 3000) {
             panel.setWaveCountdownText("1");
+            currentCountdownStage = 2;
         }
-        else if (elapsed < NEXT_WAVE_COUNTDOWN_DURATION) {
+        else if (countdownElapsed < NEXT_WAVE_COUNTDOWN_DURATION) {
             panel.setWaveCountdownText("START");
+            currentCountdownStage = 3;
         }
         else {
             waitingForNextWave = false;
             panel.setWaveCountdownText("");
+            lastCountdownStage = -1;
             waveManager.spawnNextWave(enemyManager, panel.getWidth(), panel.getHeight());
+        }
+
+        if (currentCountdownStage != -1 && currentCountdownStage != lastCountdownStage) {
+            if (currentCountdownStage == 3) {
+                Sound.play("audio/PowerUp1.wav");
+            }
+            else {
+                Sound.play("audio/Blip29.wav");
+            }
+            lastCountdownStage = currentCountdownStage;
         }
     }
 

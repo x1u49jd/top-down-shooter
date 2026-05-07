@@ -40,7 +40,6 @@ public class WaveManager {
     public void spawnNextWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
         wave++;
         enemiesPerWave += 2;
-        Sound.play("audio/PowerUp1.wav");
         spawnWave(enemyManager, panelWidth, panelHeight);
     }
 
