@@ -2,9 +2,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class InputHandler implements KeyListener, MouseListener {
-    private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, paused, restartRequested, escapeRequested = false;
+public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
+    private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, paused, restartRequested, escapeRequested, slideRequested = false;
 
     private boolean mousePressed;
     private int mouseX, mouseY;
@@ -16,7 +17,7 @@ public class InputHandler implements KeyListener, MouseListener {
         if (key == KeyEvent.VK_S) {downPressed = true;};
         if (key == KeyEvent.VK_A) {leftPressed = true;};
         if (key == KeyEvent.VK_D) {rightPressed = true;};
-        if (key == KeyEvent.VK_ENTER) {startRequested = true;}
+        if (key == KeyEvent.VK_SPACE) {slideRequested = true; startRequested = true;}
         if (key == KeyEvent.VK_R) {restartRequested = true;}
         if (key == KeyEvent.VK_ESCAPE) {escapeRequested = true;}
     }
@@ -28,7 +29,7 @@ public class InputHandler implements KeyListener, MouseListener {
         if (key == KeyEvent.VK_S) {downPressed = false;};
         if (key == KeyEvent.VK_A) {leftPressed = false;};
         if (key == KeyEvent.VK_D) {rightPressed = false;};
-        if (key == KeyEvent.VK_ENTER) {startRequested = false;}
+        if (key == KeyEvent.VK_SPACE) {slideRequested = false; startRequested = false;}
         if (key == KeyEvent.VK_R) {restartRequested = false;}
         if (key == KeyEvent.VK_ESCAPE) {escapeRequested = false;}
 
@@ -77,6 +78,18 @@ public class InputHandler implements KeyListener, MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {}
 
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        mouseX = e.getX();
+        mouseY = e.getY();
+    }
+
     public void reset() {
         upPressed = false;
         downPressed = false;
@@ -115,5 +128,9 @@ public class InputHandler implements KeyListener, MouseListener {
 
     public boolean isPaused() {
         return paused;
+    }
+
+    public boolean isSlideRequested() {
+        return slideRequested;
     }
 }

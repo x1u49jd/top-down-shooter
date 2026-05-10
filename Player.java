@@ -28,26 +28,88 @@ public class Player {
     private long reloadTime = 500;
     private long reloadStartTime = 0;
 
+    private boolean sliding = false;
+    private long slideStartTime = 0;
+    private long slideDuration = 450;
+    private double slideVX = 0, slideVY = 0;
+    private double slideAccX = 0, slideAccY = 0;
+    private double slideSpeed = 30;
+    private long slideCooldown = 800;
+    private long lastSlideTime = 0;
+
+    private double stamina = 100, maxStamina = 100;
+    private double staminaCost = 30;
+    private double staminaRechargeRate = 15; // per second
+
 
     public Player(int startX, int startY) {
         x = startX;
         y = startY;
     }
 
-    public void update(boolean up, boolean down, boolean left, boolean right, int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
-        move(up, down, left, right);
+    public void update(boolean up, boolean down, boolean left, boolean right, boolean slide, int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
+        rechargeStamina();
+        if (slide && !sliding && stamina >= staminaCost && System.currentTimeMillis() - lastSlideTime > slideCooldown) {
+            startSlide(up, down, left, right);
+        }
+        move(up, down, left, right, windowWidth, windowHeight);
         updateReload();
         updateBullets(windowWidth, windowHeight, enemies);
     }
 
-    private void move(boolean up, boolean down, boolean left, boolean right) {
+    private void rechargeStamina() {
+        stamina = Math.min(maxStamina, stamina + staminaRechargeRate / 60.0);
+    }
+
+    private void startSlide(boolean up, boolean down, boolean left, boolean right) {
+        double dx = 0, dy = 0;
+        if (up) dy -= 1;
+        if (down) dy += 1;
+        if (left) dx -= 1;
+        if (right) dx += 1;
+        if (dx == 0 && dy == 0) return; // don't slide if not moving
+        double len = Math.sqrt(dx * dx + dy * dy);
+        slideVX = (dx / len) * slideSpeed;
+        slideVY = (dy / len) * slideSpeed;
+        slideAccX = 0;
+        slideAccY = 0;
+        sliding = true;
+        slideStartTime = System.currentTimeMillis();
+        lastSlideTime = slideStartTime;
+        stamina -= staminaCost;
+    }
+
+    private void move(boolean up, boolean down, boolean left, boolean right, int windowWidth, int windowHeight) {
 
         boolean moving = up || down || left || right;
+
+        if (sliding) {
+            if (System.currentTimeMillis() - slideStartTime >= slideDuration) {
+                sliding = false;
+            } else {
+                slideAccX += slideVX;
+                slideAccY += slideVY;
+                int applyX = (int) slideAccX;
+                int applyY = (int) slideAccY;
+                x += applyX;
+                y += applyY;
+                slideAccX -= applyX;
+                slideAccY -= applyY;
+                slideVX *= 0.85;
+                slideVY *= 0.85;
+            }
+        }
 
         if (up) {y -= speed;};
         if (down) {y += speed;};
         if (left) {x -= speed;};
         if (right) {x += speed;};
+
+        // Boundary checking
+        if (x < 0) x = 0;
+        if (x + WIDTH > windowWidth) x = windowWidth - WIDTH;
+        if (y < 0) y = 0;
+        if (y + HEIGHT > windowHeight) y = windowHeight - HEIGHT;
 
         if (moving && System.currentTimeMillis() - lastWalkSound > walkDelay) {
             Sound.play("audio/Random171.wav");
@@ -63,22 +125,9 @@ public class Player {
         knockbackY *= 0.9;
     };
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, int panelWidth, int panelHeight) {
         g.setColor(Color.BLUE);
         g.fillRect(x, y, WIDTH, HEIGHT);
-
-        // ---- UI HEALTH BAR ----
-        int barWidth = 40; // same width as player
-        int barHeight = 8;
-
-        // grey background
-        g.setColor(Color.GRAY);
-        g.fillRect(x, y - 15, barWidth, barHeight);
-
-        // health scaled properly
-        g.setColor(Color.GREEN);
-        int currentWidth = (int)((health / (double)maxHealth) * barWidth);
-        g.fillRect(x, y - 15, currentWidth, barHeight);
 
         // draw bullets
         for (Bullet b : bullets) {
@@ -87,13 +136,17 @@ public class Player {
 
         // draw score
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Score: " + score, 20, 40);
+        Font scoreFont = new Font("Arial", Font.BOLD, 30);
+        g.setFont(scoreFont);
+        String scoreText = "Score: " + score;
+        int scoreX = (panelWidth - g.getFontMetrics(scoreFont).stringWidth(scoreText)) / 2;
+        g.drawString(scoreText, scoreX, 40);
 
         // draw ammo
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo + " Mags: " + magazines, 20, 80);
+        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo, 20, 40);
+        g.drawString("Mags: " + magazines, 20, 70);
 
     }
 
@@ -226,6 +279,18 @@ public class Player {
 
     public int getHealth() {
         return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public double getStamina() {
+        return stamina;
+    }
+
+    public double getMaxStamina() {
+        return maxStamina;
     }
 
     public int getScore() {

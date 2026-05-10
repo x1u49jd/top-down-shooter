@@ -60,8 +60,39 @@ public class GamePanel extends JPanel {
         for (Enemy e : enemyManager.getEnemies()) {
             e.draw(g);
         }
-        player.draw(g);
-        g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
+        player.draw(g, getWidth(), getHeight());
+
+        // ---- UI BARS (bottom left) ----
+        int barWidth = 200;
+        int barHeight = 12;
+        int barX = 20;
+        int barY = getHeight() - 70;
+
+        // Health bar
+        g.setColor(Color.GRAY);
+        g.fillRect(barX, barY, barWidth, barHeight);
+        g.setColor(Color.GREEN);
+        int healthWidth = (int)((player.getHealth() / (double)player.getMaxHealth()) * barWidth);
+        g.fillRect(barX, barY, healthWidth, barHeight);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Health: " + player.getHealth() + "/" + player.getMaxHealth(), barX, barY - 10);
+
+        // Stamina bar
+        g.setColor(new Color(80, 80, 80));
+        g.fillRect(barX, barY + 25, barWidth, barHeight);
+        g.setColor(Color.CYAN);
+        int staminaWidth = (int)((player.getStamina() / player.getMaxStamina()) * barWidth);
+        g.fillRect(barX, barY + 25, staminaWidth, barHeight);
+        g.setColor(Color.BLACK);
+        g.drawString("Stamina: " + String.format("%.0f", player.getStamina()) + "/" + (int)player.getMaxStamina(), barX, barY + 50);
+
+        Font waveFont = new Font("Arial", Font.BOLD, 24);
+        g.setFont(waveFont);
+        g.setColor(Color.BLACK);
+        String waveText = "Wave: " + waveManager.getWave();
+        int waveX = getWidth() - g.getFontMetrics(waveFont).stringWidth(waveText) - 20;
+        g.drawString(waveText, waveX, 40);
 
         if (!waveCountdownText.isEmpty()) {
             g.setFont(new Font("Arial", Font.BOLD, 80));

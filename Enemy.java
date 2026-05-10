@@ -14,12 +14,37 @@ public class Enemy {
     private double knockbackX, knockbackY;
     private int staggerDuration = 0;
 
+    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private long lastShotTime = 0;
+    private long shootCooldown = 2000; // ms between shots
+    private double shootRange = 300;   // only shoot if within this distance
+
+    private boolean sliding = false;
+    private long slideStartTime = 0;
+    private long slideDuration = 300;
+    private double slideVX = 0, slideVY = 0;
+    private double slideSpeed = 20;   // less than player
+    private long nextSlideTime = 0;
+    private long slideCheckInterval = 3000;  // check every 3 seconds
+    private double slideChance = 0.4;  // 40% chance to slide when check triggers
+
+    private double stamina = 50, maxStamina = 50;
+    private double staminaCost = 20;
+    private double staminaRechargeRate = 10; // per second
+
     public Enemy(int startX, int startY) {
         x = startX;
         y = startY;
+        nextSlideTime = System.currentTimeMillis() + (long)(Math.random() * slideCheckInterval);
     }
 
     public void update(Player player, ArrayList<Enemy> enemies) {
+
+        // update enemy bullets regardless of alive state
+        updateBullets(player);
+
+        // recharge stamina
+        rechargeStamina();
 
         // Apply knockback if stagger is active
         if (staggerDuration > 0) {
@@ -35,6 +60,24 @@ public class Enemy {
         }
 
         if (alive == false) { return;}
+
+        // Check if it's time to attempt a slide
+        if (System.currentTimeMillis() >= nextSlideTime && !sliding && stamina >= staminaCost && Math.random() < slideChance) {
+            startSlide(player);
+            nextSlideTime = System.currentTimeMillis() + slideCheckInterval;
+        }
+
+        // Apply slide movement
+        if (sliding) {
+            if (System.currentTimeMillis() - slideStartTime >= slideDuration) {
+                sliding = false;
+            } else {
+                x += (int) slideVX;
+                y += (int) slideVY;
+                slideVX *= 0.85;
+                slideVY *= 0.85;
+            }
+        }
 
         if (x < player.getX()) {x += speed;};
         if (x > player.getX()) {x -= speed;};
@@ -80,6 +123,49 @@ public class Enemy {
                 y += dy * pushStrength;
             }
         }
+
+        // shoot at player if in range and cooldown elapsed
+        double distToPlayer = Math.sqrt(Math.pow(player.getX() - x, 2) + Math.pow(player.getY() - y, 2));
+        if (distToPlayer <= shootRange && System.currentTimeMillis() - lastShotTime >= shootCooldown) {
+            double centerX = x + WIDTH / 2.0;
+            double centerY = y + HEIGHT / 2.0;
+            bullets.add(new Bullet(centerX, centerY, player.getX() + 20, player.getY() + 20));
+            Sound.play("audio/Shoot104.wav");
+            lastShotTime = System.currentTimeMillis();
+        }
+    }
+
+    private void rechargeStamina() {
+        stamina = Math.min(maxStamina, stamina + staminaRechargeRate / 60.0);
+    }
+
+    private void startSlide(Player player) {
+        double dx = player.getX() - x;
+        double dy = player.getY() - y;
+        double len = Math.sqrt(dx * dx + dy * dy);
+        if (len == 0) len = 1;
+        slideVX = (dx / len) * slideSpeed;
+        slideVY = (dy / len) * slideSpeed;
+        sliding = true;
+        slideStartTime = System.currentTimeMillis();
+        stamina -= staminaCost;
+    }
+
+    private void updateBullets(Player player) {
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            b.update();
+            // remove if far off screen
+            if (b.getX() < -100 || b.getX() > 2000 || b.getY() < -100 || b.getY() > 2000) {
+                bullets.remove(i);
+                continue;
+            }
+            // damage player on hit
+            if (player.getHealth() > 0 && b.getBounds().intersects(player.getBounds())) {
+                player.takeDamage(1);
+                bullets.remove(i);
+            }
+        }
     }
 
     public void draw(Graphics g) {
@@ -91,7 +177,7 @@ public class Enemy {
 
         if (health < maxHealth) {
             // ---- UI HEALTH BAR ----
-            int barWidth = 40; // same width as player
+            int barWidth = 40;
             int barHeight = 8;
 
             // grey background
@@ -103,9 +189,22 @@ public class Enemy {
             int currentWidth = (int)((health / (double)maxHealth) * barWidth);
             g.fillRect(x, y - 15, currentWidth, barHeight);
         }
+
+        // ---- UI STAMINA BAR ----
+        g.setColor(new Color(80, 80, 80));
+        g.fillRect(x - 1, y - 27, 42, 6);
+        g.setColor(Color.CYAN);
+        int staminaWidth = (int)((stamina / maxStamina) * 40);
+        g.fillRect(x, y - 26, staminaWidth, 4);
+
+        // draw enemy bullets
+        g.setColor(new Color(255, 140, 0));
+        for (Bullet b : bullets) {
+            b.draw(g);
+        }
     }
 
-    public boolean takeDamage(int amount, int sourceX, int sourceY) {
+    public boolean takeDamage(int amount, int sourceX, int sourceY ){
 
         // ignore damage to dead enemies
         // and adding extra score when bullet hit an already dead enemy

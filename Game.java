@@ -151,7 +151,7 @@ public class Game {
                 }
 
                 // update player's position based on keys pressed, bullets, reload
-                player.update(input.isUpPressed(), input.isDownPressed(), input.isLeftPressed(), input.isRightPressed(), panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
+                player.update(input.isUpPressed(), input.isDownPressed(), input.isLeftPressed(), input.isRightPressed(), input.isSlideRequested(), panel.getWidth(), panel.getHeight(), enemyManager.getEnemies());
                 enemyManager.update(player);
                 itemManager.checkItemPickup(player);
                 checkGameOver();
@@ -216,6 +216,7 @@ public class Game {
 
     private void setupInput() {
         panel.addMouseListener(input);
+        panel.addMouseMotionListener(input);
         window.addKeyListener(input);
     }
 
