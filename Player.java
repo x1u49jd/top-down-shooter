@@ -35,12 +35,12 @@ public class Player {
     }
 
     public void update(boolean up, boolean down, boolean left, boolean right, int windowWidth, int windowHeight, ArrayList<Enemy> enemies) {
-        move(up, down, left, right);
+        move(up, down, left, right, windowWidth, windowHeight);
         updateReload();
         updateBullets(windowWidth, windowHeight, enemies);
     }
 
-    private void move(boolean up, boolean down, boolean left, boolean right) {
+    private void move(boolean up, boolean down, boolean left, boolean right, int windowWidth, int windowHeight) {
 
         boolean moving = up || down || left || right;
 
@@ -61,6 +61,13 @@ public class Player {
         // slowly reduces knockback for smooth stop
         knockbackX *= 0.9; // friction factor
         knockbackY *= 0.9;
+
+        // unables player to move outside current window
+        if (x < 0) {x = 0;}
+        if (x + WIDTH > windowWidth) {x = windowWidth - WIDTH;}
+        if (y < 0) {y = 0;}
+        if (y + HEIGHT > windowHeight) {y = windowHeight - HEIGHT;}
+
     };
 
     public void draw(Graphics g) {
