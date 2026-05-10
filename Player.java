@@ -215,10 +215,6 @@ public class Player {
         }
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle(x, y, WIDTH, HEIGHT);
-    }
-
     public void collectItem (Item item) {
         if (item.getType() == Item.ItemType.MEDKIT) {
             // heal 1 point, but don't go over maxHealth
@@ -245,5 +241,9 @@ public class Player {
 
     public int getY() {
         return y;
+    }
+
+     public Rectangle getBounds() {
+        return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 }
