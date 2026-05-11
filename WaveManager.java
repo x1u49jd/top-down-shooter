@@ -38,9 +38,12 @@ public class WaveManager {
     }
 
     public void spawnNextWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
-        wave++;
         enemiesPerWave += 2;
         spawnWave(enemyManager, panelWidth, panelHeight);
+    }
+
+    public void incrementWave() {
+        wave++;
     }
 
     public void resetWave() {

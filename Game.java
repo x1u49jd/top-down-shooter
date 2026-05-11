@@ -158,6 +158,7 @@ public class Game {
                     updateNextWaveCountDown();
                 }
                 else if (enemyManager.areAllDead()) {
+                    waveManager.incrementWave();
                     startNextWaveCountDown();
                 }
 
