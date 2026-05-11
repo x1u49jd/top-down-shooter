@@ -12,18 +12,14 @@ public class Game {
     private static int INITIAL_WINDOW_WIDTH = 1440, INITIAL_WINDOW_HEIGHT = 900;
     
     private GameState gameState = GameState.MENU;
-
     private JFrame window;
-
     private Player player;
-
     private WaveManager waveManager;
     private ItemManager itemManager;
     private ItemSpawnManager itemSpawnManager;
     private EnemyManager enemyManager;
     private GamePanel panel;
     private InputHandler input;
-
     private boolean waitingForNextWave = false;
     private long nextWaveCountdownStartTime = 0;
     private static final long PRE_COUNTDOWN_DELAY_DURATION = 2000;

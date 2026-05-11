@@ -3,7 +3,6 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.util.ArrayList;
 
-
 public class Player {
     private static final int WIDTH = 40, HEIGHT = 40;
     private int x,y;

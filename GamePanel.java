@@ -195,8 +195,4 @@ public class GamePanel extends JPanel {
                 break;
         }
     }
-
-    public HUD getHUD() {
-        return hud;
-    }
 }

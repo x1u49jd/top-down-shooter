@@ -29,6 +29,4 @@ public class HUD {
             g.drawString(waveCountdownText, countdownX, countdownY);
         }
     }
-
-  
 }
