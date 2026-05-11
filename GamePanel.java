@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
         this.itemManager = itemManager;
         this.enemyManager = enemyManager;
         this.waveManager = waveManager;
-        this.hud = new HUD(waveManager);
+        this.hud = new HUD();
     }
 
     public void setGameState(Game.GameState gameState) {
@@ -62,7 +62,8 @@ public class GamePanel extends JPanel {
             e.draw(g);
         }
         player.draw(g);
-        hud.draw(g, getWidth(), getHeight(), waveCountdownText, player);
+
+        hud.draw(g, getWidth(), getHeight(), waveCountdownText, player, waveManager);
     }
 
     public void drawPause(Graphics g) {

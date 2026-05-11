@@ -3,18 +3,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 public class HUD {
-    
 
-    private WaveManager waveManager;
-    
-
-    public HUD(WaveManager waveManager) {
-
-        this.waveManager = waveManager;
-    }
-
-    public void draw(Graphics g, int width, int height, String waveCountdownText, Player player) {
-         // draw score count
+    public void draw(Graphics g, int width, int height, String waveCountdownText, Player player, WaveManager waveManager) {
+        // draw score count
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 24));
         g.drawString("Score: " + player.getScore(), 20, 40);
