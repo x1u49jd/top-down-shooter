@@ -10,7 +10,7 @@ public class GamePanel extends JPanel {
     private EnemyManager enemyManager;
     private WaveManager waveManager;
     private Game.GameState gameState;
-
+    private HUD hud;
     private String waveCountdownText = "";
 
     public GamePanel(Player player, ItemManager itemManager, EnemyManager enemyManager, WaveManager waveManager) {
@@ -18,6 +18,7 @@ public class GamePanel extends JPanel {
         this.itemManager = itemManager;
         this.enemyManager = enemyManager;
         this.waveManager = waveManager;
+        this.hud = new HUD(waveManager);
     }
 
     public void setGameState(Game.GameState gameState) {
@@ -61,17 +62,7 @@ public class GamePanel extends JPanel {
             e.draw(g);
         }
         player.draw(g);
-        g.drawString("Wave: " + waveManager.getWave(), getWidth() - 120, 40);
-
-        if (!waveCountdownText.isEmpty()) {
-            g.setFont(new Font("Arial", Font.BOLD, 80));
-
-            int countdownWidth = g.getFontMetrics().stringWidth(waveCountdownText);
-            int countdownX = (getWidth() - countdownWidth) / 2;
-            int countdownY = getHeight() / 2;
-            
-            g.drawString(waveCountdownText, countdownX, countdownY);
-        }
+        hud.draw(g, getWidth(), getHeight(), waveCountdownText, player);
     }
 
     public void drawPause(Graphics g) {
@@ -202,5 +193,9 @@ public class GamePanel extends JPanel {
                 drawGameOver(g);
                 break;
         }
+    }
+
+    public HUD getHUD() {
+        return hud;
     }
 }

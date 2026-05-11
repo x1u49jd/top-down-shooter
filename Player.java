@@ -1,7 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 
 
@@ -92,15 +91,7 @@ public class Player {
             b.draw(g);
         }
 
-        // draw score
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Score: " + score, 20, 40);
-
-        // draw ammo
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 24));
-        g.drawString("Ammo: " + currentAmmo + " / " + maxAmmo + " Mags: " + magazines, 20, 80);
+        
 
     }
 
@@ -235,6 +226,18 @@ public class Player {
         return score;
     }
 
+    public int getCurrentAmmo() {
+        return currentAmmo;
+    }
+
+    public int getMagazines() {
+        return magazines;
+    }
+
+    public int getMaxAmmo() {
+        return maxAmmo;
+    }
+
     public int getX() {
         return x;
     }
@@ -243,7 +246,7 @@ public class Player {
         return y;
     }
 
-     public Rectangle getBounds() {
+    public Rectangle getBounds() {
         return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 }
