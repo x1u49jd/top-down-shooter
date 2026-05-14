@@ -37,4 +37,8 @@ public class Item {
     public ItemType getType() {
         return type;
     }
+
+    public static int getSize() {
+        return WIDTH;
+    }
 }
