@@ -34,12 +34,21 @@ public class ItemManager {
         return count;
     }
 
-    public void checkItemPickup(Player player) {
+    public void checkItemPickup(Player player, EnemyManager enemyManager) {
         for (int i = items.size() - 1; i >= 0; i--) {
             Item item = items.get(i);
+            // check player pickup
             if (player.getBounds().intersects(item.getBounds())){
                 player.collectItem(item);
                 items.remove(i);
+            }
+            // check enemy pickup
+            for (Enemy enemy : enemyManager.getEnemies()) {
+                if (enemy.getBounds().intersects(item.getBounds())){
+                enemy.collectItem(item);
+                items.remove(i);
+                break; // item already removed, stop checking other enemies
+            }
             }
         }
     }

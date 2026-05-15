@@ -205,7 +205,7 @@ public class Player {
         }
     }
 
-    public void collectItem (Item item) {
+    public void collectItem(Item item) {
         if (item.getType() == Item.ItemType.MEDKIT) {
             // heal 1 point, but don't go over maxHealth
             health = Math.min(health + 1, maxHealth);

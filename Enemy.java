@@ -138,6 +138,15 @@ public class Enemy {
 
         return false; // enemy didn't die
     }
+    
+    public void collectItem(Item item) {
+        if (item.getType() == Item.ItemType.MEDKIT) {
+            // heal 1 point, but don't go over maxHealth
+            health = Math.min(health + 1, maxHealth);
+        }
+        Sound.play("audio/Random60.wav");
+    }
+
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, WIDTH, HEIGHT);
