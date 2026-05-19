@@ -41,6 +41,7 @@ public class ItemManager {
             if (player.getBounds().intersects(item.getBounds())){
                 player.collectItem(item);
                 items.remove(i);
+                continue;
             }
             // check enemy pickup
             for (Enemy enemy : enemyManager.getEnemies()) {
