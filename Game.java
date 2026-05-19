@@ -22,6 +22,7 @@ public class Game {
     private InputHandler input;
     private boolean waitingForNextWave = false;
     private long nextWaveCountdownStartTime = 0;
+    private long pausedWaveCountdownElapsedTime = 0;
     private static final long PRE_COUNTDOWN_DELAY_DURATION = 2000;
     private static final long NEXT_WAVE_COUNTDOWN_DURATION = 4000;
     private int lastCountdownStage = -1;
@@ -38,6 +39,10 @@ public class Game {
     private void pauseGame() {
         gameState = GameState.PAUSE;
         input.clearAllInput();
+        // capture elapsed time for wave countdown if waiting for next wave
+        if (waitingForNextWave) {
+            pausedWaveCountdownElapsedTime = System.currentTimeMillis() - nextWaveCountdownStartTime;
+        }
         panel.setGameState(gameState);
         panel.repaint();
     }
@@ -45,6 +50,10 @@ public class Game {
     private void unpauseGame() {
         gameState = GameState.PLAYING;
         input.clearAllInput();
+        // restore countdown timing by adjusting the start time
+        if (waitingForNextWave) {
+            nextWaveCountdownStartTime = System.currentTimeMillis() - pausedWaveCountdownElapsedTime;
+        }
     }
 
     private void restartGame() {
@@ -114,6 +123,7 @@ public class Game {
         }
         else {
             waitingForNextWave = false;
+            pausedWaveCountdownElapsedTime = 0;
             panel.setWaveCountdownText("");
             lastCountdownStage = -1;
             waveManager.spawnNextWave(enemyManager, panel.getWidth(), panel.getHeight());
