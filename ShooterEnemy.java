@@ -1,17 +1,17 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class WalkerEnemy extends Enemy {
+public class ShooterEnemy extends Enemy{
 
-    public WalkerEnemy(int startX, int startY) {
+    public ShooterEnemy(int startX, int startY) {
         super(startX, startY);
     }
 
     @Override
     public void draw(Graphics g) {
-        if (!isAlive()) { return;}
+       if (!isAlive()) { return;}
 
-        g.setColor(Color.RED);
+        g.setColor(Color.ORANGE);
         g.fillRect(getX(), getY(), getWidth(), getHeight());
 
         if (getHealth() < getMaxHealth()) {
@@ -29,4 +29,5 @@ public class WalkerEnemy extends Enemy {
             g.fillRect(getX(), getY() - 15, currentWidth, barHeight);
         }
     }
+    
 }
