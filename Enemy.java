@@ -1,9 +1,8 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Enemy {
+public abstract class Enemy {
     private static final int WIDTH = 40, HEIGHT = 40;
     private int x,y;
     private int speed = 2;
@@ -82,28 +81,8 @@ public class Enemy {
         }
     }
 
-    public void draw(Graphics g) {
-
-        if (alive == false) { return;}
-
-        g.setColor(Color.RED);
-        g.fillRect(x, y, WIDTH, HEIGHT);
-
-        if (health < maxHealth) {
-            // ---- UI HEALTH BAR ----
-            int barWidth = 40; // same width as player
-            int barHeight = 8;
-
-            // grey background
-            g.setColor(Color.GRAY);
-            g.fillRect(x, y - 15, barWidth, barHeight);
-
-            // health scaled properly
-            g.setColor(Color.RED);
-            int currentWidth = (int)((health / (double)maxHealth) * barWidth);
-            g.fillRect(x, y - 15, currentWidth, barHeight);
-        }
-    }
+    // draw the square that represents the enemy
+    public abstract void draw(Graphics g);
 
     public boolean takeDamage(int amount, int sourceX, int sourceY) {
 
@@ -152,7 +131,31 @@ public class Enemy {
         return new Rectangle(x, y, WIDTH, HEIGHT);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     public boolean isAlive(){
         return alive;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }
