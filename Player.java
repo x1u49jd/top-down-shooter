@@ -217,6 +217,10 @@ public class Player {
         Sound.play("audio/Random60.wav");
     }
 
+    public boolean isAlive() {
+        return health > 0;
+    }
+
     public int getHealth() {
         return health;
     }
