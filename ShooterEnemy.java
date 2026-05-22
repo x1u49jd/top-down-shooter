@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-public class ShooterEnemy extends Enemy{
+public class ShooterEnemy extends Enemy {
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private long lastShotTime = 0;
     private long shootDelay = 900;
@@ -42,8 +42,13 @@ public class ShooterEnemy extends Enemy{
     
     @Override
     public void update(Player player, ArrayList<Enemy> enemies) {
-        super.update(player, enemies);
-        shootAtPlayer(player);
+        // stop moving and shoot when player is within range, otherwise stop shooting and keep chasing player
+        if (isPlayerInRange(player)) {
+            shootAtPlayer(player);
+        }
+        else {
+            super.update(player, enemies);
+        }
         updateBullets(player);
     }
 
@@ -59,22 +64,28 @@ public class ShooterEnemy extends Enemy{
         double playerCenterX = player.getX() + player.getBounds().width / 2.0;
         double playerCenterY = player.getY() + player.getBounds().height / 2.0;
 
-        double dx = playerCenterX - enemyCenterX;
-        double dy = playerCenterY - enemyCenterY;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        // don't shoot if distance is greater than shooting range, else shoot
-        if (distance > shootRange) {
-            return;
-        }
-
         if (System.currentTimeMillis() - lastShotTime >= shootDelay) {
             bullets.add(new Bullet(enemyCenterX, enemyCenterY, playerCenterX, playerCenterY));
             lastShotTime = System.currentTimeMillis();
         }
     }
 
-    private void updateBullets (Player player) {
+    private boolean isPlayerInRange(Player player) {
+        // calculate the distance between the player and enemy
+        double enemyCenterX = getX() + getWidth() / 2.0;
+        double enemyCenterY = getY() + getHeight() / 2.0;
+
+        double playerCenterX = player.getX() + player.getBounds().width / 2.0;
+        double playerCenterY = player.getY() + player.getBounds().height / 2.0;
+
+        double dx = playerCenterX - enemyCenterX;
+        double dy = playerCenterY - enemyCenterY;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        return shootRange >= distance;
+    }
+
+    private void updateBullets(Player player) {
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet b = bullets.get(i);
             b.update();
