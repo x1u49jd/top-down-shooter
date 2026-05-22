@@ -3,9 +3,9 @@ import java.util.ArrayList;
 public class EnemyManager {
     private ArrayList<Enemy> enemies = new ArrayList<>();
 
-    public void update(Player player) {
+    public void update(Player player, int panelWidth, int panelHeight) {
         for (Enemy e : enemies) {
-            e.update(player, enemies);
+            e.update(player, enemies, panelWidth, panelHeight);
         }
     }
 

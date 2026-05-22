@@ -18,7 +18,20 @@ public abstract class Enemy {
         y = startY;
     }
 
-    public void update(Player player, ArrayList<Enemy> enemies) {
+    public void update(Player player, ArrayList<Enemy> enemies, int panelWidth, int panelHeight) {
+
+        if (updateKnockback()) {
+            return;
+        }
+
+        if (alive == false) { return;}
+
+        moveTowardPlayer(player);
+        handlePlayerCollision(player);
+        applySeparation(enemies);
+    }
+
+    protected boolean updateKnockback() {
 
         // Apply knockback if stagger is active
         if (staggerDuration > 0) {
@@ -30,22 +43,35 @@ public abstract class Enemy {
             knockbackY *= 0.9;
 
             staggerDuration--;
-            return; // enemy is staggered, skip normal movement
+            return true;
         }
 
-        if (alive == false) { return;}
+        return false;
+    }
 
+    protected void moveTowardPlayer(Player player) {
         if (x < player.getX()) {x += speed;};
         if (x > player.getX()) {x -= speed;};
         if (y < player.getY()) {y += speed;};
         if (y > player.getY()) {y -= speed;};
+    }
 
+    protected void moveAwayFromPlayer(Player player) {
+        if (x < player.getX()) {x -= speed;};
+        if (x > player.getX()) {x += speed;};
+        if (y < player.getY()) {y -= speed;};
+        if (y > player.getY()) {y += speed;};
+    }
+
+    protected void handlePlayerCollision(Player player) {
         // checks collision with player, and causes damage to player
         if (getBounds().intersects(player.getBounds())) {
                 player.takeDamage(1);
                 player.applyKnockback(x, y, knockbackStrength);
         }
+    }
 
+    protected void applySeparation(ArrayList<Enemy> enemies) {
         // Seperation Behaviour: prevents enemies overlapping by applying a small repelling force when they get too close
         for (Enemy other: enemies) {
             // don't compare enemy to itself or to a dead enemy, only deal with living enemies
@@ -79,6 +105,12 @@ public abstract class Enemy {
                 y += dy * pushStrength;
             }
         }
+    }
+
+    protected double getDistanceTo(Player player) {
+        double dx = player.getX() - x;
+        double dy = player.getY() - y;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     // draw the square that represents the enemy

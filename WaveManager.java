@@ -33,7 +33,6 @@ public class WaveManager {
                     spawnY = (int)(Math.random() * panelHeight);
                     break;
                 }
-            //enemyManager.addEnemy(new WalkerEnemy(spawnX, spawnY));
             enemyManager.addEnemy(new ShooterEnemy(spawnX, spawnY));
         }
     }
