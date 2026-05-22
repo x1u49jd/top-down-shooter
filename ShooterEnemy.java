@@ -6,6 +6,7 @@ public class ShooterEnemy extends Enemy{
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private long lastShotTime = 0;
     private long shootDelay = 900;
+    private double shootRange = 400;
 
     public ShooterEnemy(int startX, int startY) {
         super(startX, startY);
@@ -50,15 +51,25 @@ public class ShooterEnemy extends Enemy{
         if (!isAlive() || !player.isAlive()) {
             return;
         }
+        
+        // calculate the distance between the player and enemy
+        double enemyCenterX = getX() + getWidth() / 2.0;
+        double enemyCenterY = getY() + getHeight() / 2.0;
+
+        double playerCenterX = player.getX() + 20;
+        double playerCenterY = player.getY() + 20;
+
+        double dx = playerCenterX - enemyCenterX;
+        double dy = playerCenterY - enemyCenterY;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        // don't shoot if distance is greater than shooting range, else shoot
+        if (distance > shootRange) {
+            return;
+        }
 
         if (System.currentTimeMillis() - lastShotTime >= shootDelay) {
-            double startX = getX() + getWidth() / 2.0;
-            double startY = getY() + getHeight() / 2.0;
-
-            double targetX = player.getX() + 20;
-            double targetY = player.getY() + 20;
-
-            bullets.add(new Bullet(startX, startY, targetX, targetY));
+            bullets.add(new Bullet(enemyCenterX, enemyCenterY, playerCenterX, playerCenterY));
             lastShotTime = System.currentTimeMillis();
         }
     }
