@@ -56,8 +56,8 @@ public class ShooterEnemy extends Enemy{
         double enemyCenterX = getX() + getWidth() / 2.0;
         double enemyCenterY = getY() + getHeight() / 2.0;
 
-        double playerCenterX = player.getX() + 20;
-        double playerCenterY = player.getY() + 20;
+        double playerCenterX = player.getX() + player.getBounds().width / 2.0;
+        double playerCenterY = player.getY() + player.getBounds().height / 2.0;
 
         double dx = playerCenterX - enemyCenterX;
         double dy = playerCenterY - enemyCenterY;
