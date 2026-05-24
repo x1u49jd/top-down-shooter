@@ -40,11 +40,7 @@ public abstract class Enemy {
         if (y < player.getY()) {y += speed;};
         if (y > player.getY()) {y -= speed;};
 
-        // checks collision with player, and causes damage to player
-        if (getBounds().intersects(player.getBounds())) {
-                player.takeDamage(1);
-                player.applyKnockback(x, y, knockbackStrength);
-        }
+        handlePlayerCollision(player);
 
         // Seperation Behaviour: prevents enemies overlapping by applying a small repelling force when they get too close
         for (Enemy other: enemies) {
@@ -118,6 +114,14 @@ public abstract class Enemy {
         return false; // enemy didn't die
     }
     
+    public void handlePlayerCollision(Player player) {
+        // checks collision with player, and causes damage to player
+        if (getBounds().intersects(player.getBounds())) {
+                player.takeDamage(1);
+                player.applyKnockback(x, y, knockbackStrength);
+        }
+    }
+
     public void collectItem(Item item) {
         if (item.getType() == Item.ItemType.MEDKIT) {
             // heal 1 point, but don't go over maxHealth

@@ -50,6 +50,7 @@ public class ShooterEnemy extends Enemy {
             super.update(player, enemies);
         }
         updateBullets(player);
+        handlePlayerCollision(player);
     }
 
     private void shootAtPlayer(Player player) {
