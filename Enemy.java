@@ -115,6 +115,9 @@ public abstract class Enemy {
     }
     
     public void handlePlayerCollision(Player player) {
+        if (!alive) {
+            return;
+        }
         // checks collision with player, and causes damage to player
         if (getBounds().intersects(player.getBounds())) {
                 player.takeDamage(1);
