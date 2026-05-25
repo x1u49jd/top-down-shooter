@@ -1,5 +1,6 @@
 public class WaveManager {
 
+    private static final int SHOOTER_START_WAVE = 2;
     private int startWave = 1;
     private int startEnemiesPerWave = 3;
     private int wave = 1;
@@ -8,6 +9,8 @@ public class WaveManager {
     public void spawnWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
         enemyManager.clearEnemies();
         int margin = 50; // how far the enemy spawns outside the window
+        int shooterCount = wave - (SHOOTER_START_WAVE - 1);
+        
         for (int i = 0; i < enemiesPerWave; i++) {
 
             int spawnX = 0;
@@ -33,8 +36,14 @@ public class WaveManager {
                     spawnY = (int)(Math.random() * panelHeight);
                     break;
                 }
-            //enemyManager.addEnemy(new WalkerEnemy(spawnX, spawnY));
-            enemyManager.addEnemy(new ShooterEnemy(spawnX, spawnY));
+                
+            // add shooter enemies first, then fill the remaining with walker enemies
+            if (i < shooterCount) {
+                enemyManager.addEnemy(new ShooterEnemy(spawnX, spawnY));
+            }
+            else {
+                enemyManager.addEnemy(new WalkerEnemy(spawnX, spawnY));
+            }
         }
     }
 
