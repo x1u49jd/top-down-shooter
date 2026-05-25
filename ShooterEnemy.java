@@ -41,15 +41,15 @@ public class ShooterEnemy extends Enemy {
     }
     
     @Override
-    public void update(Player player, ArrayList<Enemy> enemies) {
+    public void update(Player player, ArrayList<Enemy> enemies, int windowWidth, int windowHeight) {
         // stop moving and shoot when player is within range, otherwise stop shooting and keep chasing player
         if (isPlayerInRange(player)) {
             shootAtPlayer(player);
         }
         else {
-            super.update(player, enemies);
+            super.update(player, enemies, windowWidth, windowHeight);
         }
-        updateBullets(player);
+        updateBullets(player, windowWidth, windowHeight);
         handlePlayerCollision(player);
     }
 
@@ -86,18 +86,17 @@ public class ShooterEnemy extends Enemy {
         return shootRange >= distance;
     }
 
-    private void updateBullets(Player player) {
+    private void updateBullets(Player player, int windowWidth, int windowHeight) {
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet b = bullets.get(i);
             b.update();
-            /*
+           
             // if bullet goes off screen, remove it
             if (b.getX() < 0 || b.getX() > windowWidth || b.getY() < 0 || b.getY() > windowHeight) {
                 bullets.remove(i);
                 continue;
             }
-            */
-
+            
             if (player.isAlive() && b.getBounds().intersects(player.getBounds())) {
                 System.out.println("Bullet touched player");
                 player.takeDamage(1);

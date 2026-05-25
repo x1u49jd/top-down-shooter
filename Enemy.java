@@ -18,7 +18,7 @@ public abstract class Enemy {
         y = startY;
     }
 
-    public void update(Player player, ArrayList<Enemy> enemies) {
+    public void update(Player player, ArrayList<Enemy> enemies, int windowWidth, int windowHeight) {
 
         // Apply knockback if stagger is active
         if (staggerDuration > 0) {
