@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class Enemy {
     private static final int WIDTH = 40, HEIGHT = 40;
     private int x,y;
-    private int speed = 2;
+    private int speed;
     private int health = 3, maxHealth = 3;
     private double knockbackStrength = 10;
     private boolean alive = true;
@@ -13,9 +13,10 @@ public abstract class Enemy {
     private double knockbackX, knockbackY;
     private int staggerDuration = 0;
 
-    public Enemy(int startX, int startY) {
-        x = startX;
-        y = startY;
+    public Enemy(int startX, int startY, int speed) {
+        this.x = startX;
+        this.y = startY;
+        this.speed = speed;
     }
 
     public void update(Player player, ArrayList<Enemy> enemies, int windowWidth, int windowHeight) {

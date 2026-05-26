@@ -3,13 +3,14 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class ShooterEnemy extends Enemy {
+    private final static int SPEED = 2;
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private long lastShotTime = 0;
     private long shootDelay = 900;
     private double shootRange = 400;
 
     public ShooterEnemy(int startX, int startY) {
-        super(startX, startY);
+        super(startX, startY, SPEED);
     }
 
     @Override

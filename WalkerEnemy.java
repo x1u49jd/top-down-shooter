@@ -2,9 +2,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class WalkerEnemy extends Enemy {
+    private final static int SPEED = 3;
 
     public WalkerEnemy(int startX, int startY) {
-        super(startX, startY);
+        super(startX, startY, SPEED);
     }
 
     @Override
