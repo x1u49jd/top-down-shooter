@@ -1,3 +1,8 @@
+package main;
+
+import entities.Player;
+import managers.WaveManager;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;

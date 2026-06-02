@@ -1,3 +1,9 @@
+package managers;
+
+import entities.Item;
+import entities.Player;
+import entities.Enemy;
+
 import java.util.ArrayList;
 
 public class ItemManager {

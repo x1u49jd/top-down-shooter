@@ -1,3 +1,8 @@
+package main;
+
+import entities.Player;
+import managers.*;
+
 import javax.swing.JFrame;
 
 public class Game {

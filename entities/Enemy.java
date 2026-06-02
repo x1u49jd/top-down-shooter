@@ -1,3 +1,7 @@
+package entities;
+
+import main.Sound;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;

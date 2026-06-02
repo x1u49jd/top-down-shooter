@@ -1,3 +1,7 @@
+package managers;
+
+import entities.Item;
+
 import java.util.Random;
 
 public class ItemSpawnManager {

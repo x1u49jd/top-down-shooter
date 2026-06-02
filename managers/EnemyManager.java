@@ -1,3 +1,8 @@
+package managers;
+
+import entities.Enemy;
+import entities.Player;
+
 import java.util.ArrayList;
 
 public class EnemyManager {

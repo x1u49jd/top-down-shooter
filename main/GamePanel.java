@@ -1,3 +1,10 @@
+package main;
+
+import entities.Player;
+import entities.Item;
+import entities.Enemy;
+import managers.*;
+
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;

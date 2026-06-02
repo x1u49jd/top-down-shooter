@@ -1,10 +1,12 @@
+package entities;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
 public class Item {
 
-    enum ItemType {
+    public enum ItemType {
         MEDKIT,
         MAGAZINE
     }

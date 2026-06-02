@@ -1,3 +1,8 @@
+package managers;
+
+import entities.WalkerEnemy;
+import entities.ShooterEnemy;
+
 public class WaveManager {
 
     private static final int SHOOTER_START_WAVE = 2;
