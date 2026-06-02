@@ -241,8 +241,4 @@ public class Game {
 
         new Thread(this::gameLoop).start();
     }
-
-    public static void main(String[] args) {
-        new Game();
-    }
 }
