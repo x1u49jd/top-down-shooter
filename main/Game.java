@@ -14,7 +14,7 @@ public class Game {
         GAME_OVER
     }
 
-    private static int INITIAL_WINDOW_WIDTH = 1440, INITIAL_WINDOW_HEIGHT = 900;
+    private static final int INITIAL_WINDOW_WIDTH = 1440, INITIAL_WINDOW_HEIGHT = 900;
     
     private GameState gameState = GameState.MENU;
     private JFrame window;

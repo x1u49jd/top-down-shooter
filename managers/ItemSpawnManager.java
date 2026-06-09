@@ -8,10 +8,11 @@ public class ItemSpawnManager {
     
     private static final int ITEM_SIZE = Item.getSize();
     private static final int SPAWN_PADDING = 50;
+    private static final Random RANDOM = new Random();
     private int maxItemsOnScreen = 4;
     private long itemsSpawnDelay = 1000;
     private long lastItemSpawnTime = 0;
-    private final Random random = new Random();
+   
 
     private void spawnItem(ItemManager itemManager, int panelWidth, int panelHeight) {
         // counts how many of each item there already are on the screen
@@ -28,14 +29,14 @@ public class ItemSpawnManager {
         int maxY = panelHeight - ITEM_SIZE - SPAWN_PADDING; //bottom
       
         // pick random position within the safe spawn boundaries
-        int spawnX = random.nextInt(maxX - minX + 1) + minX;
-        int spawnY = random.nextInt(maxY - minY + 1) + minY; 
+        int spawnX = RANDOM.nextInt(maxX - minX + 1) + minX;
+        int spawnY = RANDOM.nextInt(maxY - minY + 1) + minY; 
 
         Item.ItemType type;
         
         // ensures atleast one Medkit and one Magazine are spawned on the screen at first
         if (medkitsOnScreen == 0 && magazinesOnScreen == 0) {
-            type = random.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
+            type = RANDOM.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
         }
         else if (medkitsOnScreen == 0) {
             type = Item.ItemType.MEDKIT;
@@ -44,7 +45,7 @@ public class ItemSpawnManager {
             type = Item.ItemType.MAGAZINE;
         }
         else {
-            type = random.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
+            type = RANDOM.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
         }
 
         itemManager.addItem(new Item(spawnX, spawnY, type));

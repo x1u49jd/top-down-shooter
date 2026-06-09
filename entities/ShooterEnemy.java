@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class ShooterEnemy extends Enemy {
-    private final static int SPEED = 2;
+    private static final int SPEED = 2;
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private long lastShotTime = 0;
     private long shootDelay = 900;
