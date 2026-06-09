@@ -6,9 +6,11 @@ import java.awt.Color;
 
 public class Bullet {
     private static final int WIDTH = 8, HEIGHT = 8;
+    private static final double SPEED = 30;
+
+    // === position and movement ===
     private double x, y;
     private double velX, velY;
-    private double speed = 30;
     
     public Bullet(double startX, double startY, double targetX, double targetY) {
         x = startX;
@@ -25,10 +27,10 @@ public class Bullet {
         if (length == 0) {length = 1;};
 
         // dx / length and dy /length normalise vector, makes it length 1, this gives direction
-        // multiplying the vector by speed scales the vector, how fast the bullet moves
+        // multiplying the vector by SPEED scales the vector, how fast the bullet moves
         // velX and VelY tell you how much the bullet moves each frame in x and y
-        velX = (dx / length) * speed;
-        velY = (dy / length) * speed;
+        velX = (dx / length) * SPEED;
+        velY = (dy / length) * SPEED;
     }
 
     // bullet moves along the direction toward the target by (velX, velY)

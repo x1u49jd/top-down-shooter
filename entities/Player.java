@@ -9,27 +9,30 @@ import java.util.ArrayList;
 
 public class Player {
     private static final int WIDTH = 40, HEIGHT = 40;
+    private static final int SPEED = 6;
+    private static final int MAX_HEALTH = 5;
+    private static final int MAX_AMMO = 16;
+    private static final long WALK_DELAY = 200;
+    private static final long RELOAD_TIME = 500;
+
+    // === position and movement === 
     private int x,y;
-    private int speed = 6;
-    private int health = 5, maxHealth = 5;
     private int knockbackX, knockbackY;
-
-    private ArrayList<Bullet> bullets = new ArrayList<>();
-
-    private int maxAmmo = 16;
-    private int currentAmmo = 16;
+    
+    // === combat ===
+    private int health = MAX_HEALTH;
+    private int currentAmmo = MAX_AMMO;
     private int magazines = 3;
-
-    private int score = 0;
-
-    private long lastWalkSound = 0;
-    private long walkDelay = 200;
-
     private boolean reloading = false;
     private boolean readyToShoot = true;
-    private long reloadTime = 500;
     private long reloadStartTime = 0;
+    private ArrayList<Bullet> bullets = new ArrayList<>();
 
+    // === audio ===
+    private long lastWalkSound = 0;
+
+    // === misc ===
+    private int score = 0;
 
     public Player(int startX, int startY) {
         x = startX;
@@ -46,12 +49,12 @@ public class Player {
 
         boolean moving = up || down || left || right;
 
-        if (up) {y -= speed;};
-        if (down) {y += speed;};
-        if (left) {x -= speed;};
-        if (right) {x += speed;};
+        if (up) {y -= SPEED;};
+        if (down) {y += SPEED;};
+        if (left) {x -= SPEED;};
+        if (right) {x += SPEED;};
 
-        if (moving && System.currentTimeMillis() - lastWalkSound > walkDelay) {
+        if (moving && System.currentTimeMillis() - lastWalkSound > WALK_DELAY) {
             Sound.play("audio/Random171.wav");
             lastWalkSound = System.currentTimeMillis();
         }
@@ -86,7 +89,7 @@ public class Player {
 
         // health scaled properly
         g.setColor(Color.GREEN);
-        int currentWidth = (int)((health / (double)maxHealth) * barWidth);
+        int currentWidth = (int)((health / (double)MAX_HEALTH) * barWidth);
         g.fillRect(x, y - 15, currentWidth, barHeight);
 
         // draw bullets
@@ -172,8 +175,8 @@ public class Player {
     // completes the reload process once time has passed
     private void updateReload() {
         if (reloading) {
-            if (System.currentTimeMillis() - reloadStartTime >= reloadTime) {
-                currentAmmo = maxAmmo;
+            if (System.currentTimeMillis() - reloadStartTime >= RELOAD_TIME) {
+                currentAmmo = MAX_AMMO;
                 magazines--;
                 reloading = false;
                 readyToShoot = true;
@@ -211,11 +214,11 @@ public class Player {
 
     public void collectItem(Item item) {
         if (item.getType() == Item.ItemType.MEDKIT) {
-            // heal 1 point, but don't go over maxHealth
-            health = Math.min(health + 1, maxHealth);
+            // heal 1 point, but don't go over MAX_HEALTH
+            health = Math.min(health + 1, MAX_HEALTH);
         }
         if (item.getType() == Item.ItemType.MAGAZINE) {
-            // heal 1 point, but don't go over maxHealth
+            // heal 1 point, but don't go over MAX_HEALTH
             magazines++;
         }
         Sound.play("audio/Random60.wav");
@@ -242,7 +245,7 @@ public class Player {
     }
 
     public int getMaxAmmo() {
-        return maxAmmo;
+        return MAX_AMMO;
     }
 
     public int getX() {

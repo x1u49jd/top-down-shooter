@@ -11,13 +11,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 public class GamePanel extends JPanel {
-    
     private Player player;
+    private HUD hud;
     private ItemManager itemManager;
     private EnemyManager enemyManager;
     private WaveManager waveManager;
     private Game.GameState gameState;
-    private HUD hud;
     private String waveCountdownText = "";
 
     public GamePanel(Player player, ItemManager itemManager, EnemyManager enemyManager, WaveManager waveManager) {

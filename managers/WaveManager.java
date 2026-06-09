@@ -4,12 +4,11 @@ import entities.WalkerEnemy;
 import entities.ShooterEnemy;
 
 public class WaveManager {
-
     private static final int SHOOTER_START_WAVE = 2;
-    private int startWave = 1;
-    private int startEnemiesPerWave = 3;
-    private int wave = 1;
-    private int enemiesPerWave = 3;
+    private static final int START_WAVE = 1;
+    private static final int START_ENEMIES_PER_WAVE = 3;
+    private int wave = START_WAVE;
+    private int enemiesPerWave = START_ENEMIES_PER_WAVE;
 
     public void spawnWave(EnemyManager enemyManager, int panelWidth, int panelHeight) {
         enemyManager.clearEnemies();
@@ -62,8 +61,8 @@ public class WaveManager {
     }
 
     public void resetWave() {
-        wave = startWave;
-        enemiesPerWave = startEnemiesPerWave;
+        wave = START_WAVE;
+        enemiesPerWave = START_ENEMIES_PER_WAVE;
     }
 
     public int getWave() {

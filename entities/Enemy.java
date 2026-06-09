@@ -8,13 +8,17 @@ import java.util.ArrayList;
 
 public abstract class Enemy {
     private static final int WIDTH = 40, HEIGHT = 40;
-    private int x,y;
-    private int speed;
-    private int health = 3, maxHealth = 3;
-    private double knockbackStrength = 10;
-    private boolean alive = true;
+    private static final int MAX_HEALTH = 3;
+    private static final double KNOCKBACK_STRENGTH = 10;
 
+    // === position and movement ===
+    private int x,y;
     private double knockbackX, knockbackY;
+    private int speed;
+    
+    // === combat === 
+    private int health = MAX_HEALTH;
+    private boolean alive = true;
     private int staggerDuration = 0;
 
     public Enemy(int startX, int startY, int speed) {
@@ -24,7 +28,6 @@ public abstract class Enemy {
     }
 
     public void update(Player player, ArrayList<Enemy> enemies, int windowWidth, int windowHeight) {
-
         // Apply knockback if stagger is active
         if (staggerDuration > 0) {
             x += knockbackX;
@@ -104,9 +107,9 @@ public abstract class Enemy {
         }
 
         // apply knockback
-        double knockbackStrength = 2;
-        knockbackX = dx * knockbackStrength;
-        knockbackY = dy * knockbackStrength;
+        double KNOCKBACK_STRENGTH = 2;
+        knockbackX = dx * KNOCKBACK_STRENGTH;
+        knockbackY = dy * KNOCKBACK_STRENGTH;
         staggerDuration = 10; // frames to stagger
 
         if (health <= 0) {
@@ -126,18 +129,17 @@ public abstract class Enemy {
         // checks collision with player, and causes damage to player
         if (getBounds().intersects(player.getBounds())) {
                 player.takeDamage(1);
-                player.applyKnockback(x, y, knockbackStrength);
+                player.applyKnockback(x, y, KNOCKBACK_STRENGTH);
         }
     }
 
     public void collectItem(Item item) {
         if (item.getType() == Item.ItemType.MEDKIT) {
-            // heal 1 point, but don't go over maxHealth
-            health = Math.min(health + 1, maxHealth);
+            // heal 1 point, but don't go over MAX_HEALTH
+            health = Math.min(health + 1, MAX_HEALTH);
         }
         Sound.play("audio/Random60.wav");
     }
-
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, WIDTH, HEIGHT);
@@ -168,6 +170,6 @@ public abstract class Enemy {
     }
 
     public int getMaxHealth() {
-        return maxHealth;
+        return MAX_HEALTH;
     }
 }

@@ -6,10 +6,12 @@ import java.util.ArrayList;
 
 public class ShooterEnemy extends Enemy {
     private static final int SPEED = 2;
+    private static final long SHOOT_DELAY = 900;
+    private static final double SHOOT_RANGE = 400;
+
+    // === combat ===
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private long lastShotTime = 0;
-    private long shootDelay = 900;
-    private double shootRange = 400;
 
     public ShooterEnemy(int startX, int startY) {
         super(startX, startY, SPEED);
@@ -68,7 +70,7 @@ public class ShooterEnemy extends Enemy {
         double playerCenterX = player.getX() + player.getBounds().width / 2.0;
         double playerCenterY = player.getY() + player.getBounds().height / 2.0;
 
-        if (System.currentTimeMillis() - lastShotTime >= shootDelay) {
+        if (System.currentTimeMillis() - lastShotTime >= SHOOT_DELAY) {
             bullets.add(new Bullet(enemyCenterX, enemyCenterY, playerCenterX, playerCenterY));
             lastShotTime = System.currentTimeMillis();
         }
@@ -86,7 +88,7 @@ public class ShooterEnemy extends Enemy {
         double dy = playerCenterY - enemyCenterY;
         double distance = Math.sqrt(dx * dx + dy * dy);
 
-        return shootRange >= distance;
+        return SHOOT_RANGE >= distance;
     }
 
     private void updateBullets(Player player, int windowWidth, int windowHeight) {

@@ -5,12 +5,11 @@ import entities.Item;
 import java.util.Random;
 
 public class ItemSpawnManager {
-    
     private static final int ITEM_SIZE = Item.getSize();
     private static final int SPAWN_PADDING = 50;
     private static final Random RANDOM = new Random();
-    private int maxItemsOnScreen = 4;
-    private long itemsSpawnDelay = 1000;
+    private static final int MAX_ITEMS_ON_SCREEN = 4;
+    private static final long ITEMS_SPAWN_DELAY = 1000;
     private long lastItemSpawnTime = 0;
    
 
@@ -20,7 +19,7 @@ public class ItemSpawnManager {
         int magazinesOnScreen = itemManager.countType(Item.ItemType.MAGAZINE);
 
         // if the amount exceeds the maximum don't proceed
-        if (itemManager.getSize() >= maxItemsOnScreen) return;
+        if (itemManager.getSize() >= MAX_ITEMS_ON_SCREEN) return;
 
         // calculate spawn boundaries, keeping items away from screen edges
         int minX = SPAWN_PADDING; // left
@@ -53,7 +52,7 @@ public class ItemSpawnManager {
 
 
     public void update(ItemManager itemManager, int width, int height) {
-        if (itemManager.getSize() < maxItemsOnScreen && System.currentTimeMillis() - lastItemSpawnTime > itemsSpawnDelay) {
+        if (itemManager.getSize() < MAX_ITEMS_ON_SCREEN && System.currentTimeMillis() - lastItemSpawnTime > ITEMS_SPAWN_DELAY) {
             spawnItem(itemManager, width, height);
             lastItemSpawnTime = System.currentTimeMillis();
         }

@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 
 public class InputHandler implements KeyListener, MouseListener {
     private boolean upPressed, downPressed, leftPressed, rightPressed, startRequested, paused, restartRequested, escapeRequested = false;
-
     private boolean mousePressed;
     private int mouseX, mouseY;
 

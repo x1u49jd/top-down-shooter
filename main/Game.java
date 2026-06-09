@@ -15,21 +15,26 @@ public class Game {
     }
 
     private static final int INITIAL_WINDOW_WIDTH = 1440, INITIAL_WINDOW_HEIGHT = 900;
+    private static final long PRE_COUNTDOWN_DELAY_DURATION = 2000;
+    private static final long NEXT_WAVE_COUNTDOWN_DURATION = 4000;
     
-    private GameState gameState = GameState.MENU;
+    // === core ===
     private JFrame window;
+    private GamePanel panel;
     private Player player;
+    private InputHandler input;
+
+    // === managers === 
     private WaveManager waveManager;
     private ItemManager itemManager;
     private ItemSpawnManager itemSpawnManager;
     private EnemyManager enemyManager;
-    private GamePanel panel;
-    private InputHandler input;
+    
+    // === state ===
+    private GameState gameState = GameState.MENU;
     private boolean waitingForNextWave = false;
     private long nextWaveCountdownStartTime = 0;
     private long pausedWaveCountdownElapsedTime = 0;
-    private static final long PRE_COUNTDOWN_DELAY_DURATION = 2000;
-    private static final long NEXT_WAVE_COUNTDOWN_DURATION = 4000;
     private int lastCountdownStage = -1;
 
     private void backMenu() {

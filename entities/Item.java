@@ -10,9 +10,9 @@ public class Item {
         MEDKIT,
         MAGAZINE
     }
-    
+
     private static final int WIDTH = 20, HEIGHT = 20;
-    private int x,y;
+    private int x,y;    
     private ItemType type;
 
     public Item(int startX, int startY, ItemType type) {
