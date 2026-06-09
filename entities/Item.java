@@ -6,11 +6,6 @@ import java.awt.Rectangle;
 
 public class Item {
 
-    public enum ItemType {
-        MEDKIT,
-        MAGAZINE
-    }
-
     private static final int WIDTH = 20, HEIGHT = 20;
     private int x,y;    
     private ItemType type;

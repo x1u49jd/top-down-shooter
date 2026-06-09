@@ -1,5 +1,7 @@
 package managers;
 
+import entities.ItemType;
+
 import entities.Item;
 import entities.Player;
 import entities.Enemy;
@@ -29,7 +31,7 @@ public class ItemManager {
         return items.size();
     }
 
-    public int countType(Item.ItemType type) {
+    public int countType(ItemType type) {
         int count = 0;
 
         for (Item i : items) {

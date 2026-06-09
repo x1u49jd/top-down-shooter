@@ -1,6 +1,7 @@
 package managers;
 
 import entities.Item;
+import entities.ItemType;
 
 import java.util.Random;
 
@@ -15,8 +16,8 @@ public class ItemSpawnManager {
 
     private void spawnItem(ItemManager itemManager, int panelWidth, int panelHeight) {
         // counts how many of each item there already are on the screen
-        int medkitsOnScreen = itemManager.countType(Item.ItemType.MEDKIT);
-        int magazinesOnScreen = itemManager.countType(Item.ItemType.MAGAZINE);
+        int medkitsOnScreen = itemManager.countType(ItemType.MEDKIT);
+        int magazinesOnScreen = itemManager.countType(ItemType.MAGAZINE);
 
         // if the amount exceeds the maximum don't proceed
         if (itemManager.getSize() >= MAX_ITEMS_ON_SCREEN) return;
@@ -31,20 +32,20 @@ public class ItemSpawnManager {
         int spawnX = RANDOM.nextInt(maxX - minX + 1) + minX;
         int spawnY = RANDOM.nextInt(maxY - minY + 1) + minY; 
 
-        Item.ItemType type;
+        ItemType type;
         
         // ensures atleast one Medkit and one Magazine are spawned on the screen at first
         if (medkitsOnScreen == 0 && magazinesOnScreen == 0) {
-            type = RANDOM.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
+            type = RANDOM.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
         }
         else if (medkitsOnScreen == 0) {
-            type = Item.ItemType.MEDKIT;
+            type = ItemType.MEDKIT;
         }
         else if (magazinesOnScreen == 0) {
-            type = Item.ItemType.MAGAZINE;
+            type = ItemType.MAGAZINE;
         }
         else {
-            type = RANDOM.nextBoolean() ? Item.ItemType.MAGAZINE : Item.ItemType.MEDKIT;
+            type = RANDOM.nextBoolean() ? ItemType.MAGAZINE : ItemType.MEDKIT;
         }
 
         itemManager.addItem(new Item(spawnX, spawnY, type));
